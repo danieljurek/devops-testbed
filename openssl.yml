@@ -1,0 +1,19 @@
+jobs:
+  - job: "TestMuch"
+    strategy:
+      matrix:
+        Windows2016:
+          OSVmImage: vs2017-win2016
+        Windows2019L
+          OSVmImage: windows-2019
+        Linux:
+          OSVmImage: ubuntu-16.04
+        OSX1013:
+          OSVmImage: macOS-10.13
+        OSX2014:
+          OsVmImage: macOS-10.14
+
+    steps:
+    - script: |
+        openssl version
+      displayName: "Run OpenSSL"
