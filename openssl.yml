@@ -4,7 +4,7 @@ jobs:
       matrix:
         Windows2016:
           OSVmImage: vs2017-win2016
-        Windows2019L
+        Windows2019:
           OSVmImage: windows-2019
         Linux:
           OSVmImage: ubuntu-16.04
