@@ -1,0 +1,4 @@
+jobs:
+  - job: GO
+    steps:
+      - template: ./cosmos-steps.yml
