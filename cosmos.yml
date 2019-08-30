@@ -1,6 +1,6 @@
 jobs:
   - job: GO
     pool:
-      vmImage: "$(OSVmImage)"
+      vmImage: vs2017-win2016
     steps:
       - template: ./cosmos-steps.yml
