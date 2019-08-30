@@ -13,6 +13,10 @@ jobs:
         OSX2014:
           OsVmImage: macOS-10.14
 
+
+    pool:
+      vmImage: "$(OSVmImage)"
+
     steps:
     - script: |
         openssl version
