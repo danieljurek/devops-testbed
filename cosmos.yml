@@ -8,6 +8,9 @@ resources:
 
 jobs:
   - job: GO
+    variables:
+      StartParameters: ''
+
     strategy:
       matrix:
         JavaParams:
