@@ -2,7 +2,7 @@ parameters:
   ForkUrl: not-specified
   RepoName: not-specified
   IncrementCommand: not-specified
-  BranchName: version-increment-build-$(Build.BuildId)
+  BranchName: version-increment-build-$(Build.BuildId).$(Agent.Id)
   PackageName: package-not-specified
 
 jobs:
