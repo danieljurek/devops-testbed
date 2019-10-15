@@ -49,7 +49,7 @@ jobs:
         displayName: Push
         env:
           GITHUB_PAT: $(github-tag-creation-pat)
-          GIT_ASKPASS: git-pat.sh
+          GIT_ASKPASS: ../git-pat.sh
 
       # TODO: Provide more information on package names and output version
       - pwsh: |
