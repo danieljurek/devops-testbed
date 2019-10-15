@@ -21,12 +21,11 @@ jobs:
 
     steps:
       - script: |
-          echo echo $GITHUB_PAT > git-pat.sh
+          echo echo $GITHUB_PAT > ../git-pat.sh
           chmod +x git-pat.sh
         displayName: Create token script
 
       - script: |
-          cd s
           git remote add fork ${{ parameters.ForkUrl }}
         displayName: Add GitHub fork remote
 
