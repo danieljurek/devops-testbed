@@ -1,0 +1,7 @@
+jobs:
+  - template: clone-to-pr-template.yml
+    parameters:
+      RepoUrl: https://github.com/danieljurek/devops-testbed.git
+      RepoName: danieljurek/devops-testbed
+      IncrementCommand: echo "testing" > test.txt
+

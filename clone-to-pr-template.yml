@@ -1,0 +1,57 @@
+parameters:
+  RepoUrl: not-specified
+  RepoName: not-specified
+  IncrementCommand: not-specified
+  BranchName: version-increment-build-$(Build.BuildId)
+  PackageName: package-not-specified
+
+jobs:
+  - job: CloneToPr
+    strategy:
+      matrix:
+        Windows:
+          OSVmImage: vs2017-win2016
+        Linux:
+          OSVmImage: ubuntu-16.04
+        OSX:
+          OSVmImage: macOS-10.13
+
+    pool: $(OSVmImage)
+
+    steps:
+      - script: |
+          echo echo $GITHUB_PAT > git-pat.sh
+          chmod +x git-pat.sh
+        displayName: Create token script
+
+      - script: |
+          cd s
+          git remote add fork ${{ parameters.RepoUrl }}
+        displayName: Add GitHub fork remote
+
+      - script: |
+          git checkout -b ${{ parameters.BranchName }}
+
+      - script: |
+          ${{ parameters.IncrementCommand }}
+        displayName: Increment Version
+
+      - script: |
+          git commit -am "Increment package version after release ${{ parameters.PackageName }}"
+        displayName: Commit
+
+      - script: |
+          git push -u fork ${{ parameters.BranchName }}
+        displayName: Push
+        env:
+          GITHUB_PAT: $(github-tag-creation-pat)
+
+      # TODO: Provide more information on package names and output version
+      - pwsh: |
+          $securePassword = ConvertTo-SecureString $env:GITHUB_PAT -AsPlainText -Force
+          $cred = New-Object System.Management.Automation.PSCredential('azure-sdk', $securePassword)
+          $body = '{ "title": "version increment ${{ parameters.PackageName }} $(OSVmImage)", "head": "azure-sdk:${{ parameters.BranchName }}", "base": "$(Build.SourceBranchName)", "maintainer_can_modify": true }'
+          Invoke-RestMethod -Method POST -Uri https://api.github.com/repos/${{ parameters.RepoName }}/pulls -Authentication Basic -Credential $cred -ContentType "application/json" -Body $body
+        displayName: Open PR
+        env:
+          GITHUB_PAT: $(github-tag-creation-pat)
