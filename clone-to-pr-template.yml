@@ -55,8 +55,8 @@ jobs:
       # TODO: Provide more information on package names and output version
       - pwsh: |
           $securePassword = ConvertTo-SecureString $env:GITHUB_PAT -AsPlainText -Force
-          $cred = New-Object System.Management.Automation.PSCredential('azure-sdk', $securePassword)
-          $body = '{ "title": "version increment ${{ parameters.PackageName }} $(OSVmImage)", "head": "azure-sdk:${{ parameters.BranchName }}", "base": "$(Build.SourceBranchName)", "maintainer_can_modify": true }'
+          $cred = New-Object System.Management.Automation.PSCredential('danieljurek', $securePassword)
+          $body = '{ "title": "version increment ${{ parameters.PackageName }} $(OSVmImage)", "head": "danieljurek:${{ parameters.BranchName }}", "base": "$(Build.SourceBranchName)", "maintainer_can_modify": true }'
           Invoke-RestMethod -Method POST -Uri https://api.github.com/repos/${{ parameters.RepoName }}/pulls -Authentication Basic -Credential $cred -ContentType "application/json" -Body $body
         displayName: Open PR
         env:
