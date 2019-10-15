@@ -38,7 +38,10 @@ jobs:
         displayName: Increment Version
 
       - script: |
-          git commit -am "Increment package version after release ${{ parameters.PackageName }}"
+          git config --global user.name "Azure SDK Bot"
+          git config --global user.email "azuresdk@microsoft.com"
+          git add .
+          git commit -m "Increment package version after release ${{ parameters.PackageName }}"
         displayName: Commit
 
       - script: |
