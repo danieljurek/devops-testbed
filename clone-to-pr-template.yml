@@ -45,6 +45,7 @@ jobs:
         displayName: Commit
 
       - script: |
+          pwd
           git push -u fork ${{ parameters.BranchName }}
         displayName: Push
         env:
