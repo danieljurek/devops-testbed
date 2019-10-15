@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         Windows:
-          OSVmImage: vs2017-win2016
+          OSVmImage: windows-2019
         Linux:
           OSVmImage: ubuntu-16.04
         OSX:
