@@ -51,7 +51,7 @@ jobs:
           git push -u fork ${{ parameters.BranchName }}
         displayName: Push
         env:
-          GITHUB_PAT: $(github-tag-creation-pat)
+          GITHUB_PAT: $(github-pat)
           GIT_ASKPASS: ../git-pat.sh
 
       # TODO: Provide more information on package names and output version
@@ -62,4 +62,4 @@ jobs:
           Invoke-RestMethod -Method POST -Uri https://api.github.com/repos/${{ parameters.RepoName }}/pulls -Authentication Basic -Credential $cred -ContentType "application/json" -Body $body
         displayName: Open PR
         env:
-          GITHUB_PAT: $(github-tag-creation-pat)
+          GITHUB_PAT: $(github-pat)
