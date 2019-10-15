@@ -46,6 +46,8 @@ jobs:
 
       - script: |
           pwd
+          stat ../git-pat.sh
+          ls
           git push -u fork ${{ parameters.BranchName }}
         displayName: Push
         env:
