@@ -1,7 +1,7 @@
 jobs:
   - template: clone-to-pr-template.yml
     parameters:
-      ForkUrl: https://azure-sdk@github.com/azure-sdk/azure-sdk-for-js.git
-      RepoName: danieljurek/azure-sdk-for-js
+      ForkUrl: https://danieljurek@github.com/danieljurek/devops-testbed.git
+      RepoName: danieljurek/devops-testbed
       IncrementCommand: echo "testing" > test.txt
 
