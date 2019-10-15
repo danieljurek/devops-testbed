@@ -16,7 +16,8 @@ jobs:
         OSX:
           OSVmImage: macOS-10.13
 
-    pool: $(OSVmImage)
+    pool:
+      vmImage: $(OSVmImage)
 
     steps:
       - script: |
