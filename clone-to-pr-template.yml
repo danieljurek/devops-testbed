@@ -21,7 +21,8 @@ jobs:
 
     steps:
       - script: |
-          echo echo $GITHUB_PAT > ../git-pat.sh
+          cd ..
+          echo echo $GITHUB_PAT > git-pat.sh
           chmod +x git-pat.sh
         displayName: Create token script
 
