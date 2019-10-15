@@ -22,7 +22,7 @@ jobs:
     steps:
       - script: |
           cd ..
-          echo echo $GITHUB_PAT > git-pat.sh
+          echo echo \$GITHUB_PAT > git-pat.sh
           chmod +x git-pat.sh
         displayName: Create token script
 
@@ -46,7 +46,6 @@ jobs:
 
       - script: |
           cat ../git-pat.sh
-          ../git-pat.sh
           git push -u fork ${{ parameters.BranchName }}
         displayName: Push
         env:
