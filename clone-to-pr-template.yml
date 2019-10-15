@@ -20,32 +20,31 @@ jobs:
       vmImage: $(OSVmImage)
 
     steps:
-      - script: |
+      - bash: |
           cd ..
           echo echo \$GITHUB_PAT > git-pat.sh
           chmod +x git-pat.sh
         displayName: Create token script
 
-      - script: |
+      - bash: |
           git remote add fork ${{ parameters.ForkUrl }}
         displayName: Add GitHub fork remote
 
-      - script: |
+      - bash: |
           git checkout -b ${{ parameters.BranchName }}
 
-      - script: |
+      - bash: |
           ${{ parameters.IncrementCommand }}
         displayName: Increment Version
 
-      - script: |
+      - bash: |
           git config --global user.name "Azure SDK Bot"
           git config --global user.email "azuresdk@microsoft.com"
           git add .
           git commit -m "Increment package version after release ${{ parameters.PackageName }}"
         displayName: Commit
 
-      - script: |
-          cat ../git-pat.sh
+      - bash: |
           git push -u fork ${{ parameters.BranchName }}
         displayName: Push
         env:
@@ -53,6 +52,7 @@ jobs:
           GIT_ASKPASS: ../git-pat.sh
 
       # TODO: Provide more information on package names and output version
+      # TODO: Find: danieljurek, Replace: azure-sdk
       - pwsh: |
           $securePassword = ConvertTo-SecureString $env:GITHUB_PAT -AsPlainText -Force
           $cred = New-Object System.Management.Automation.PSCredential('danieljurek', $securePassword)
