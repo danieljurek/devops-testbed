@@ -1,5 +1,5 @@
 parameters:
-  RepoUrl: not-specified
+  ForkUrl: not-specified
   RepoName: not-specified
   IncrementCommand: not-specified
   BranchName: version-increment-build-$(Build.BuildId)
@@ -27,7 +27,7 @@ jobs:
 
       - script: |
           cd s
-          git remote add fork ${{ parameters.RepoUrl }}
+          git remote add fork ${{ parameters.ForkUrl }}
         displayName: Add GitHub fork remote
 
       - script: |
@@ -49,6 +49,7 @@ jobs:
         displayName: Push
         env:
           GITHUB_PAT: $(github-tag-creation-pat)
+          GIT_ASKPASS: git-pat.sh
 
       # TODO: Provide more information on package names and output version
       - pwsh: |
