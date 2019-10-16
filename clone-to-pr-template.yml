@@ -6,7 +6,7 @@ parameters:
   PackageName: package-not-specified
 
 jobs:
-  - job: CloneToPr
+  - job: IncrementPackageVersion
     strategy:
       matrix:
         Windows:

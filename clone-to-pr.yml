@@ -3,5 +3,5 @@ jobs:
     parameters:
       ForkUrl: https://danieljurek@github.com/danieljurek/devops-testbed.git
       RepoName: danieljurek/devops-testbed
-      IncrementCommand: echo "testing" > test.txt
+      IncrementCommand: echo $(Build.Repository.name) > test.txt
 
