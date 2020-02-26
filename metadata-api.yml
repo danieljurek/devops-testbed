@@ -19,6 +19,6 @@ jobs:
 
     steps:
     - pwsh: |
-        $response = Invoke-WebRequest "http://169.254.169.254/metadata/instance?api-version=2019-08-15"
+        $response = Invoke-WebRequest "http://169.254.169.254/metadata/instance?api-version=2019-08-15" -Headers @{ Metadata = "true" }
         Write-Host $response.Content
       displayName: "Request metadata"
