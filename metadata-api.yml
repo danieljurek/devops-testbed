@@ -1,0 +1,24 @@
+jobs:
+  - job: "TestMuch"
+    strategy:
+      matrix:
+        Windows2016:
+          OSVmImage: vs2017-win2016
+        Windows2019:
+          OSVmImage: windows-2019
+        Linux:
+          OSVmImage: ubuntu-16.04
+        OSX1013:
+          OSVmImage: macOS-10.13
+        OSX2014:
+          OsVmImage: macOS-10.14
+
+
+    pool:
+      vmImage: "$(OSVmImage)"
+
+    steps:
+    - pwsh: >-
+        $response = Invoke-WebRequest "http://169.254.169.254/metadata/instance?api-version=2019-08-15"
+        Write-Host $response.Content
+      displayName: "Request metadata"
