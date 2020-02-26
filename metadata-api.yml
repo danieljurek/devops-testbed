@@ -6,8 +6,10 @@ jobs:
           OSVmImage: vs2017-win2016
         Windows2019:
           OSVmImage: windows-2019
-        Linux:
+        Ubuntu1604:
           OSVmImage: ubuntu-16.04
+        Ubuntu1804:
+          OSVmImage: ubuntu-18.04
         OSX1013:
           OSVmImage: macOS-10.13
         OSX2014:
