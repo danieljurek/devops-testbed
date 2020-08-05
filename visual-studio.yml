@@ -23,7 +23,7 @@ jobs:
         --add Microsoft.VisualStudio.Component.VC.14.23.x86.x64
         --add Microsoft.VisualStudio.Component.VC.14.23.x86.x64.Spectre
         --add Microsoft.VisualStudio.Component.VC.14.23.CLI.Support
-        --installPath 'C:\Program Files (x86)\Microsoft Visual Studio\2019'
+        --installPath 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise'
         --passive
         --includeRecommended
         | Wait-Process
