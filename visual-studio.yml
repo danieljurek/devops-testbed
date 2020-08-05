@@ -14,7 +14,7 @@ jobs:
       displayName: list stuff
 
     - pwsh: >-
-        'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe'
+        & 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe'
         modify
         --add Microsoft.VisualStudio.Component.VC.v141.x86.x64
         --add Microsoft.VisualStudio.Component.VC.v141.x86.x64
