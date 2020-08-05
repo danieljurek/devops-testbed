@@ -12,3 +12,23 @@ jobs:
     - pwsh: |
         ls  'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC'
       displayName: list stuff
+
+    - pwsh: >-
+        .\vs_installer.exe
+        modify
+        --add Microsoft.VisualStudio.Component.VC.v141.x86.x64
+        --add Microsoft.VisualStudio.Component.VC.v141.x86.x64
+        --add Microsoft.VisualStudio.Component.VC.v141.CLI.Support
+        --add Microsoft.VisualStudio.Component.VC.v141.x86.x64.Spectre
+        --add Microsoft.VisualStudio.Component.VC.14.23.x86.x64
+        --add Microsoft.VisualStudio.Component.VC.14.23.x86.x64.Spectre
+        --add Microsoft.VisualStudio.Component.VC.14.23.CLI.Support
+        --installPath C:\Program Files (x86)\Microsoft Visual Studio\2019\
+        --passive
+        --includeRecommended
+        | Wait-Process
+      displayName: Ensure required packages are installed
+
+    - pwsh: |
+        ls  'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC'
+      displayName: list stuff
