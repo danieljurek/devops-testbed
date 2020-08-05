@@ -1,0 +1,15 @@
+jobs:
+  - job: "TestMuch"
+    strategy:
+      matrix:
+        Windows2019:
+          OSVmImage: windows-2019
+
+    pool:
+      vmImage: "$(OSVmImage)"
+
+    steps:
+    - script: |
+        ls  'C:\Program Files (x86)\Microsoft Visual Studio\'
+        ls  'C:\Program Files (x86)\Microsoft Visual Studio\Installer'
+      displayName: list stuff
