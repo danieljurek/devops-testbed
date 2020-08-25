@@ -15,5 +15,6 @@ jobs:
     - script: ls -lah /usr/bin/
     - script: sudo apt update
     - script: sudo apt install -y g++-5 g++-4
+    - script: g++-7 --version
     - script: g++-5 --version
     - script: g++-4 --version
