@@ -16,5 +16,8 @@ jobs:
     - script: sudo apt update
     - script: sudo apt install -y g++-5 g++-4
     - script: g++-7 --version
+      continueOnError: true
     - script: g++-5 --version
+      continueOnError: true
     - script: g++-4 --version
+      continueOnError: true
