@@ -13,8 +13,16 @@ jobs:
 
     steps:
     - script: ls -lah /usr/bin/
+    - script: gcc-7 --version
+      continueOnError: true
+    - script: gcc-5 --version
+      continueOnError: true
+    - script: gcc-4 --version
+      continueOnError: true
+
     - script: sudo apt update
     - script: sudo apt install -y g++-5 g++-4
+    
     - script: gcc-7 --version
       continueOnError: true
     - script: gcc-5 --version
