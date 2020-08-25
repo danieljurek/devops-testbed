@@ -1,0 +1,15 @@
+jobs:
+  - job: "TestMuch"
+    strategy:
+      matrix:
+        Ubuntu_1604:
+          OSVmImage: ubuntu-16.04
+        Ubuntu_1804:
+          OSVmImage: ubuntu-18.04
+
+
+    pool:
+      vmImage: "$(OSVmImage)"
+
+    steps:
+    - script: ls -lah /usr/bin/
