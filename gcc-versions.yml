@@ -21,8 +21,8 @@ jobs:
       continueOnError: true
 
     - script: sudo apt update
-    - script: sudo apt install -y g++-5 g++-4
-    
+    - script: sudo apt install -y gcc-5.3 gcc-4
+
     - script: gcc-7 --version
       continueOnError: true
     - script: gcc-5 --version
