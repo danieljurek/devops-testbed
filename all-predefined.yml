@@ -1,6 +1,9 @@
 jobs:
   - job: EVERYONE
     steps:
+      - pwsh: |
+          Write-Host "GIT_TERMINAL_PROMPT: $($env:GIT_TERMINAL_PROMPT)"
+        displayName: GIT_TERMINAL_PROMPT
       - script: |
           echo "===AGENT VARIABLES==="
           echo Agent.BuildDirectory -> $(Agent.BuildDirectory)
