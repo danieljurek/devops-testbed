@@ -17,7 +17,7 @@ jobs:
     steps: 
       - task: Cache@2
         inputs:
-          key: test-cache-1 | $(OSVmImage)
+          key: test-cache-1 | "$(OSVmImage)"
           cacheHitVar: CacheRestoreSuccess
         displayName: Cache
       
