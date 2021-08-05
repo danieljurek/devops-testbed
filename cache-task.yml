@@ -24,7 +24,7 @@ jobs:
       - bash: echo -e "Cache file contents\n====================\n"$(cat cache.txt)"\n===================="
         displayName: Show file contents 1
 
-      - bash: echo "hello world" | cache.txt
+      - bash: echo "hello world" > cache.txt
         displayName: Write to file if cache did not restore
         condition: ne(variables['CacheRestoreSuccess'], true)
 
