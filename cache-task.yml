@@ -1,0 +1,32 @@
+jobs:
+  - job: ValidateCacheTask
+    strategy:
+      matrix:
+        Ubuntu16:
+          Pool: Azure Pipelines
+          OSVmImage: ubuntu-16.04
+        Ubuntu18:
+          Pool: Azure Pipelines
+          OSVmImage: ubuntu-18.04
+        Ubuntu20:
+          Pool: Azure Pipelines
+          OSVmImage: ubuntu-20.04
+    pool:
+      name: $(Pool)
+      vmImage: $(OSVmImage)
+    steps: 
+      - task: Cache@2
+        inputs:
+          key: test-cache-1 | $(OSVmImage)
+          cacheHitVar: CacheRestoreSuccess
+        displayName: Cache
+      
+      - bash: echo -e "Cache file contents\n====================\n"$(cat cache.txt)"\n===================="
+        displayName: Show file contents 1
+
+      - bash: echo "hello world" | cache.txt
+        displayName: Write to file if cache did not restore
+        condition: ne(variables['CacheRestoreSuccess'], true)
+
+      - bash: echo -e "Cache file contents\n====================\n"$(cat cache.txt)"\n===================="
+        displayName: Show file contents 2
