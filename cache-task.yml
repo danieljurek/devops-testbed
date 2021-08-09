@@ -34,6 +34,9 @@ jobs:
 
           echo -e "/run/systemd/resolve/resolv.conf\n================="
           sudo cat /run/systemd/resolve/resolv.conf
+
+          sudo "ls -l /etc"
+          sudo ls -l /etc
         displayName: Show resolv.conf file contents
         continueOnError: true
 
