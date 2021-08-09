@@ -38,22 +38,22 @@ jobs:
           cat /run/systemd/resolve/resolv.conf
         displayName: Show resolv.conf file contents
 
-      - pwsh: New-Item -ItemType Directory -Force -Path $(CacheTestPath)
+      - pwsh: New-Item -ItemType Directory -Force -Path /tmp/cache-test
         displayName: Create folder for test file
 
       - task: Cache@2
         inputs:
-          key: test-cache-2 | "$(OSVmImage)"
-          path: $(CacheTestPath)
+          key: test-cache-3 | "$(OSVmImage)"
+          path: /tmp/cache-test
           cacheHitVar: CacheRestoreSuccess
         displayName: Cache
       
-      - bash: echo -e "Cache file contents\n====================\n"$(cat $(CacheFilePath))"\n===================="
+      - bash: echo -e "Cache file contents\n====================\n"$(cat /tmp/cache-test/cache.txt)"\n===================="
         displayName: Show file contents 1
 
-      - bash: echo "hello world" > $(CacheFilePath)
+      - bash: echo "hello world" > /tmp/cache-test/cache.txt
         displayName: Write to file if cache did not restore
         condition: ne(variables['CacheRestoreSuccess'], true)
 
-      - bash: echo -e "Cache file contents\n====================\n"$(cat $(CacheFilePath))"\n===================="
+      - bash: echo -e "Cache file contents\n====================\n"$(cat /tmp/cache-test/cache.txt)"\n===================="
         displayName: Show file contents 2
