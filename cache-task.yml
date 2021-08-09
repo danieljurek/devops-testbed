@@ -17,19 +17,25 @@ jobs:
     pool:
       name: $(Pool)
       vmImage: $(OSVmImage)
-    steps: 
+      CacheTestPath: $(Agent.TempDirectory)/cache-test
+      CacheFilePath: $(CacheTestPath)/cache.text
+    steps:
+      - pwsh: New-Item -ItemType Directory -Force -Path $(CacheTestPath)
+        displayName: Create folder for test file
+
       - task: Cache@2
         inputs:
           key: test-cache-2 | "$(OSVmImage)"
+          path: $(CacheTestPath)
           cacheHitVar: CacheRestoreSuccess
         displayName: Cache
       
-      - bash: echo -e "Cache file contents\n====================\n"$(cat cache.txt)"\n===================="
+      - bash: echo -e "Cache file contents\n====================\n"$(cat $(CacheFilePath))"\n===================="
         displayName: Show file contents 1
 
-      - bash: echo "hello world" > cache.txt
+      - bash: echo "hello world" > $(CacheFilePath)
         displayName: Write to file if cache did not restore
         condition: ne(variables['CacheRestoreSuccess'], true)
 
-      - bash: echo -e "Cache file contents\n====================\n"$(cat cache.txt)"\n===================="
+      - bash: echo -e "Cache file contents\n====================\n"$(cat $(CacheFilePath))"\n===================="
         displayName: Show file contents 2
