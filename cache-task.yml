@@ -17,8 +17,6 @@ jobs:
     pool:
       name: $(Pool)
       vmImage: $(OSVmImage)
-      CacheTestPath: $(Agent.TempDirectory)/cache-test
-      CacheFilePath: $(CacheTestPath)/cache.text
     steps:
 
       # - script: sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
