@@ -30,11 +30,12 @@ jobs:
 
       - script: | 
           echo -e "/etc/resolv.conf\n=============="
-          cat /etc/resolv.conf
+          sudo cat /etc/resolv.conf
 
           echo -e "/run/systemd/resolve/resolv.conf\n================="
-          cat /run/systemd/resolve/resolv.conf
+          sudo cat /run/systemd/resolve/resolv.conf
         displayName: Show resolv.conf file contents
+        continueOnError: true
 
       - pwsh: New-Item -ItemType Directory -Force -Path /tmp/cache-test
         displayName: Create folder for test file
