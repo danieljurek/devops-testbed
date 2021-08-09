@@ -30,6 +30,14 @@ jobs:
       #       eq(variables['Container'], '')
       #     )
 
+      - script: | 
+          echo -e "/etc/resolv.conf\n=============="
+          cat /etc/resolv.conf
+
+          echo -e "/run/systemd/resolve/resolv.conf\n================="
+          cat /run/systemd/resolve/resolv.conf
+        displayName: Show resolv.conf file contents
+
       - pwsh: New-Item -ItemType Directory -Force -Path $(CacheTestPath)
         displayName: Create folder for test file
 
