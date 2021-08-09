@@ -20,6 +20,16 @@ jobs:
       CacheTestPath: $(Agent.TempDirectory)/cache-test
       CacheFilePath: $(CacheTestPath)/cache.text
     steps:
+
+      - script: sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+        displayName: Bypass local DNS server to workaround issue resolving cognitiveservices names
+        condition: |
+          and(
+            succeededOrFailed(),
+            contains(variables['OSVmImage'], 'ubuntu'),
+            eq(variables['Container'], '')
+          )
+
       - pwsh: New-Item -ItemType Directory -Force -Path $(CacheTestPath)
         displayName: Create folder for test file
 
