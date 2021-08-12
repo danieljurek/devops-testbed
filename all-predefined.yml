@@ -6,9 +6,10 @@ jobs:
         displayName: GIT_TERMINAL_PROMPT
 
       - task: PowerShell@2
-        targetType: inline
-        script: Get-Host
-        pwsh: false
+        inputs:
+          targetType: inline
+          script: Get-Host
+          pwsh: false
       # TODO: Use something other than echo, especially on windows
       # - script: |
       #     echo "===AGENT VARIABLES==="
