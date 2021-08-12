@@ -1,5 +1,7 @@
 jobs:
   - job: predefineds
+    pool: 
+      vmImage: windows-2019
     steps:
       - pwsh: |
           Write-Host "GIT_TERMINAL_PROMPT: $($env:GIT_TERMINAL_PROMPT)"
