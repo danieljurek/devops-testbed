@@ -12,6 +12,10 @@ jobs:
           targetType: inline
           script: Get-Host
           pwsh: false
+      - pwsh: |
+          Write-Host "Build.Repository.Name -> $(Build.Repository.Name)"
+        displayName: Variables
+
       # TODO: Use something other than echo, especially on windows
       # - script: |
       #     echo "===AGENT VARIABLES==="
