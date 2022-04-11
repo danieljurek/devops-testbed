@@ -1,8 +1,22 @@
 jobs:
   - job: predefineds
-    pool: 
+    pool:
       vmImage: windows-2019
+    variables:
+      TEST_RUNTIME_SETTINGS: ONE
     steps:
+      - pwsh: |
+          Write-Host 'TEST_RUNTIME_SETTINGS: $(TEST_RUNTIME_SETTINGS)'
+          Write-Host "Assign: TWO"
+          Write-Host " "##vso[task.setvariable variable=TEST_RUNTIME_SETTINGS;]TWO"
+        displayName: Set TEST_RUNTIME_SETTINGS
+
+
+      - pwsh: |
+          Write-Host "TEST_RUNTIME_SETTINGS: $(TEST_RUNTIME_SETTINGS)"
+        displayName: Show TEST_RUNTIME_SETTINGS after setting
+
+
       - pwsh: |
           Write-Host "GIT_TERMINAL_PROMPT: $($env:GIT_TERMINAL_PROMPT)"
         displayName: GIT_TERMINAL_PROMPT
