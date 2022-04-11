@@ -8,7 +8,7 @@ jobs:
       - pwsh: |
           Write-Host 'TEST_RUNTIME_SETTINGS: $(TEST_RUNTIME_SETTINGS)'
           Write-Host "Assign: TWO"
-          Write-Host " "##vso[task.setvariable variable=TEST_RUNTIME_SETTINGS;]TWO"
+          Write-Host "##vso[task.setvariable variable=TEST_RUNTIME_SETTINGS;]TWO"
         displayName: Set TEST_RUNTIME_SETTINGS
 
 
