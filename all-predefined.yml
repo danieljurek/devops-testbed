@@ -6,29 +6,32 @@ jobs:
       TEST_RUNTIME_SETTINGS: ONE
     steps:
       - pwsh: |
-          Write-Host 'TEST_RUNTIME_SETTINGS: $(TEST_RUNTIME_SETTINGS)'
-          Write-Host "Assign: TWO"
-          Write-Host "##vso[task.setvariable variable=TEST_RUNTIME_SETTINGS;]TWO"
-        displayName: Set TEST_RUNTIME_SETTINGS
+          Write-Host "Build.Repository.Uri: $(Build.Repository.Uri)"
+        displayName: Build.Repository.Uri
+      # - pwsh: |
+      #     Write-Host 'TEST_RUNTIME_SETTINGS: $(TEST_RUNTIME_SETTINGS)'
+      #     Write-Host "Assign: TWO"
+      #     Write-Host "##vso[task.setvariable variable=TEST_RUNTIME_SETTINGS;]TWO"
+      #   displayName: Set TEST_RUNTIME_SETTINGS
 
 
-      - pwsh: |
-          Write-Host "TEST_RUNTIME_SETTINGS: $(TEST_RUNTIME_SETTINGS)"
-        displayName: Show TEST_RUNTIME_SETTINGS after setting
+      # - pwsh: |
+      #     Write-Host "TEST_RUNTIME_SETTINGS: $(TEST_RUNTIME_SETTINGS)"
+      #   displayName: Show TEST_RUNTIME_SETTINGS after setting
 
 
-      - pwsh: |
-          Write-Host "GIT_TERMINAL_PROMPT: $($env:GIT_TERMINAL_PROMPT)"
-        displayName: GIT_TERMINAL_PROMPT
+      # - pwsh: |
+      #     Write-Host "GIT_TERMINAL_PROMPT: $($env:GIT_TERMINAL_PROMPT)"
+      #   displayName: GIT_TERMINAL_PROMPT
 
-      - task: PowerShell@2
-        inputs:
-          targetType: inline
-          script: Get-Host
-          pwsh: false
-      - pwsh: |
-          Write-Host "Build.Repository.Name -> $(Build.Repository.Name)"
-        displayName: Variables
+      # - task: PowerShell@2
+      #   inputs:
+      #     targetType: inline
+      #     script: Get-Host
+      #     pwsh: false
+      # - pwsh: |
+      #     Write-Host "Build.Repository.Name -> $(Build.Repository.Name)"
+      #   displayName: Variables
 
       # TODO: Use something other than echo, especially on windows
       # - script: |
