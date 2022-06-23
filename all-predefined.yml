@@ -11,7 +11,7 @@ jobs:
         name: GenerateUrlBase
         displayName: Set UrlBase
 
-      - pwsh: Write-Host "$(UrlBase)"
+      - pwsh: Write-Host "$(GenerateUrlBase.UrlBase)"
 
       # - pwsh: |
       #     Write-Host "Build.Repository.Uri: $(Build.Repository.Uri)"
