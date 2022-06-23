@@ -6,8 +6,16 @@ jobs:
       TEST_RUNTIME_SETTINGS: ONE
     steps:
       - pwsh: |
-          Write-Host "Build.Repository.Uri: $(Build.Repository.Uri)"
-        displayName: Build.Repository.Uri
+          $urlBase = "https://example.com/"
+          Write-Host "##vso[task.setvariable variable=UrlBase;isOutput=true]$urlBase"
+        name: GenerateUrlBase
+        displayName: Set UrlBase
+
+      - pwsh: Write-Host "$(UrlBase)"
+
+      # - pwsh: |
+      #     Write-Host "Build.Repository.Uri: $(Build.Repository.Uri)"
+      #   displayName: Build.Repository.Uri
       # - pwsh: |
       #     Write-Host 'TEST_RUNTIME_SETTINGS: $(TEST_RUNTIME_SETTINGS)'
       #     Write-Host "Assign: TWO"
