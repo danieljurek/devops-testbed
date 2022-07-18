@@ -14,4 +14,4 @@ steps:
       pwsh: true
       filePath: test.ps1
       arguments: >
-        -SkipCommit $$[${{ parameters.SkipCheckingForChanges }}]
+        -SkipCommit $$(${{ parameters.SkipCheckingForChanges }})
