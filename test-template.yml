@@ -1,0 +1,17 @@
+parameters:
+  SkipCheckingForChanges: false
+
+steps:
+  - pwsh: |
+      Write-Host "I should be skipped ${{ parameters.SkipCheckingForChanges }}"
+    displayName: Check for changes
+    condition: and(succeeded(), eq(${{ parameters.SkipCheckingForChanges }}, false))
+
+  - task: PowerShell@2 
+    displayName: Push Changes
+    condition: and(succeeded, eq(variables['HasChanges'], true))
+    inputs:
+      pwsh: true
+      filePath: /test.ps1
+      arguments: >
+        -SkipCommit $${{ parameters.SkipCheckingForChanges }}
