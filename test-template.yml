@@ -12,6 +12,6 @@ steps:
     condition: and(succeeded(), eq(variables['HasChanges'], true))
     inputs:
       pwsh: true
-      filePath: /test.ps1
+      filePath: test.ps1
       arguments: >
         -SkipCommit $${{ parameters.SkipCheckingForChanges }}
