@@ -28,7 +28,7 @@ jobs:
           Start-Sleep -Seconds 5
         displayName: Sleep for 5 seconds
 
-      - pwsh: Get-Process | Select-Object -Property Id,Name,CommandLine
+      - pwsh: Get-Process -Name python | Select-Object -Property Id,Name,CommandLine
         displayName: List all processes
 
       - pwsh: |
