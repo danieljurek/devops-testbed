@@ -6,7 +6,13 @@ param(
 )
 
 function ensureParentPath($filePath) {
-  $parentPath = Resolve-Path (Split-Path $filePath -Parent)
+  $parentPath = Split-Path $filePath -Parent
+  if (!$parentPath) {
+    # If the $parentPath is '' then the path is the current working directory
+    # and no directory needs to be created.
+    return
+  }
+
   if (!(Test-Path $parentPath)) {
     New-Item -ItemType Directory -Path $parentPath | Out-Null
   }
