@@ -31,6 +31,9 @@ jobs:
       - pwsh: Get-Process | Select-Object -Property Id,Name,CommandLine
         displayName: List all processes
 
+      - script: ps -x | grep python
+        condition: contains(variables['Agent.OS'], 'ubuntu')
+
       - pwsh: |
           Stop-Process -Id $(ServerProcessId)
         displayName: Stop long running service
