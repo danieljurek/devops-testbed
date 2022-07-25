@@ -38,4 +38,5 @@ jobs:
 
           Write-Host "/WebSocketServer/WebSocketServer.err.log"
           Get-Content "/WebSocketServer/WebSocketServer.err.log"
+        condition: always()
         displayName: Show logs
