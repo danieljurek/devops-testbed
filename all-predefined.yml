@@ -32,7 +32,7 @@ jobs:
         displayName: List all processes
 
       - script: ps -x | grep python
-        condition: contains(variables['Agent.OS'], 'ubuntu')
+        condition: contains(variables['Agent.OS'], 'Linux')
 
       - pwsh: |
           Stop-Process -Id $(ServerProcessId)
