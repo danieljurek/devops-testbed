@@ -14,8 +14,8 @@ if ($IsWindows) {
     -RedirectStandardError $ErrorLogFileLocation
 } else {
   $process = Start-Process `
-    -FilePath (Get-Command nohup) `
-    -ArgumentList @('python3', 'long_service.py') `
+    -FilePath (Get-Command pwsh) `
+    -ArgumentList @( '-c', "python3 long_service.py") `
     -PassThru `
     -RedirectStandardOutput $LogFileLocation `
     -RedirectStandardError $ErrorLogFileLocation
