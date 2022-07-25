@@ -33,10 +33,10 @@ jobs:
         displayName: Stop long running service
 
       - pwsh: |
-          Write-Host "WebSocketServer/WebSocketServer.log"
-          Get-Content WebSocketServer/WebSocketServer.log
+          Write-Host "WebSocketServer.log"
+          Get-Content WebSocketServer.log
 
-          Write-Host "/WebSocketServer/WebSocketServer.err.log"
-          Get-Content "/WebSocketServer/WebSocketServer.err.log"
+          Write-Host "WebSocketServer.err.log"
+          Get-Content WebSocketServer.err.log
         condition: always()
         displayName: Show logs
