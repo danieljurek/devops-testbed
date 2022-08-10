@@ -4,18 +4,29 @@ jobs:
       vmImage: windows-2019
     variables:
       TEST_RUNTIME_SETTINGS: ONE
+      SetAtVariable: YEP
     steps:
 
-      - pwsh: Write-Host "##vso[task.setvariable variable=PublishToVcpkg]true"
-        displayName: Set PublishToVcpkg to true
+      - pwsh: Write-Host "Hello world" 
+        displayName: Set at variable -- $(SetAtVariable)
 
-      - pwsh: Write-Host "##vso[task.setvariable variable=HasChanges]true"
-        displayName: Set HasChanges to true
+      - pwsh: Write-Host "Hello world" 
+        displayName: Set at queue-time -- $(SetAtQueueTime)
 
-      - template: /test-template.yml
-        parameters:
-          SkipCheckingForChanges: variables['PublishToVcpkg']
-          # SkipCheckingForChanges: variables['PublishToVcpkg']
+      - pwsh: Write-Host "Hello world" 
+        displayName: Not set -- $(NotSet)
+
+
+      # - pwsh: Write-Host "##vso[task.setvariable variable=PublishToVcpkg]true"
+      #   displayName: Set PublishToVcpkg to true
+
+      # - pwsh: Write-Host "##vso[task.setvariable variable=HasChanges]true"
+      #   displayName: Set HasChanges to true
+
+      # - template: /test-template.yml
+      #   parameters:
+      #     SkipCheckingForChanges: variables['PublishToVcpkg']
+      #     # SkipCheckingForChanges: false
 
       # - pwsh: |
       #     $urlBase = "https://example.com/"

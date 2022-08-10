@@ -5,7 +5,7 @@ steps:
   - pwsh: |
       Write-Host "I should be skipped ${{ parameters.SkipCheckingForChanges }}"
     displayName: Check for changes
-    condition: and(succeeded(), eq(${{ parameters.SkipCheckingForChanges }}, false))
+    condition: and(succeeded(), eq($[${{ parameters.SkipCheckingForChanges }}], false))
 
   - task: PowerShell@2 
     displayName: Push Changes

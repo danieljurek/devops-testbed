@@ -1,0 +1,33 @@
+name: build
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Create an "artifact"
+        run: echo "Hello world" > artifact.txt
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: the-artifact
+          path: artifact.txt
+
+      - name: Find artifacts
+        id: post-comment
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const ghRestContext = { owner: context.repo.owner, repo: context.repo.repo }
+            console.log(context.payload)
+            const artifactResponse = await github.rest.actions.listWorkflowRunArtifacts(
+              { ...ghRestContext, run_id: context.payload.workflow_run.id }
+            )
+            console.log(artifactResponse)

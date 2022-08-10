@@ -1,0 +1,27 @@
+name: comment
+
+on:
+  workflow_run:
+    workflows: [build]
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Find artifacts
+        id: post-comment
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const ghRestContext = { owner: context.repo.owner, repo: context.repo.repo }
+            console.log(context.payload)
+            const artifactResponse = await github.rest.actions.listWorkflowRunArtifacts(
+              { ...ghRestContext, run_id: context.payload.workflow_run.id }
+            )
+            console.log(artifactResponse)
