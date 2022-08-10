@@ -8,13 +8,13 @@ jobs:
     steps:
 
       - pwsh: Write-Host "Hello world" 
-        displayName: Set at variable -- `$(SetAtVariable)
+        displayName: Set at variable -- $`(SetAtVariable)
 
       - pwsh: Write-Host "Hello world" 
-        displayName: Set at queue-time -- `$(SetAtQueueTime)
+        displayName: Set at queue-time -- $`(SetAtQueueTime)
 
       - pwsh: Write-Host "Hello world" 
-        displayName: Not set -- `$(NotSet)
+        displayName: Not set -- $`(NotSet)
 
 
       # - pwsh: Write-Host "##vso[task.setvariable variable=PublishToVcpkg]true"
