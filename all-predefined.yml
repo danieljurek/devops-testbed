@@ -18,6 +18,7 @@ jobs:
           Write-Host "Downloading finished."
 
           Write-Host "Installing..."
+          Import-Module Appx
           Add-AppxPackage .\ubuntu.appx
           Write-Host "Install complete."
 
