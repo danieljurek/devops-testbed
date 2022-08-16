@@ -19,7 +19,6 @@ jobs:
 
           Write-Host "Installing..."
           Import-Module Appx
-          Get-Error
           Add-AppxPackage .\ubuntu.appx
           Write-Host "Install complete."
 
