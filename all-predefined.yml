@@ -21,14 +21,12 @@ jobs:
           Get-ChildItem ubuntu/ -Recurse
           Write-Host "Extraction complete" 
 
-          Get-ChildItem "$($env:USERPROFILE)/ubuntu"
-
           Write-Host "Installing..."
           Import-Module Appx
           Add-AppxPackage ./ubuntu/Ubuntu_2004.2021.825.0_x64.appx
           Write-Host "Install complete."
 
-          Get-ChildItem "$($env:USERPROFILE)/ubuntu"
+          Get-ChildItem "$($env:USERPROFILE)"
 
       - pwsh: |
           wslconfig /help
