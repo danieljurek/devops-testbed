@@ -13,14 +13,20 @@ jobs:
       - powershell: |
           Write-Host "Downloading..."
           $client = New-Object System.Net.WebClient
-          $client.DownloadFile('https://aka.ms/wslubuntu2004', 'ubuntu.appx')
-
+          $client.DownloadFile('https://aka.ms/wslubuntu2004', 'ubuntu.appx.zip')
           Write-Host "Downloading finished."
+
+          Write-Host "Extracting..."
+          Expand-Archive ubuntu.appx.zip ./ubuntu/
+          Get-ChildtItem ubuntu/ -Recurse
+          Write-Host "Extraction complete" 
 
           Write-Host "Installing..."
           Import-Module Appx
-          Add-AppxPackage .\ubuntu.appx
+          Add-AppxPackage ./ubuntu/Ubuntu_2004.2021.825.0_x64.appx
           Write-Host "Install complete."
+
+          Get-ChildItem $env:USERPROFILE -Recurse 
 
       - pwsh: |
           wslconfig /help
