@@ -7,6 +7,10 @@ jobs:
       SetAtVariable: YEP
     steps:
 
+      - pwsh: | 
+          wslconfig /help
+          wslconfig /list /all
+
       - pwsh: |
           Write-Host "wsl --status"
           wsl --status
