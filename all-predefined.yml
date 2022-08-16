@@ -27,6 +27,7 @@ jobs:
           Write-Host "Install complete."
 
           Get-ChildItem "$($env:USERPROFILE)"
+          Get-ChildItem . -Recurse
 
       - pwsh: |
           wslconfig /help
