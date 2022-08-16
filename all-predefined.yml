@@ -29,6 +29,8 @@ jobs:
           Get-ChildItem "$($env:USERPROFILE)"
           Get-ChildItem . -Recurse
 
+      - pwsh: ubuntu.exe
+
       - pwsh: |
           wslconfig /help
           wslconfig /list /all
