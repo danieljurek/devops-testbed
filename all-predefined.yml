@@ -13,12 +13,13 @@ jobs:
       - powershell: |
           Write-Host "Downloading..."
           $client = New-Object System.Net.WebClient
-          $client.DownloadFile('https://aka.ms/wslubuntu2204', 'ubuntu.appx')
+          $client.DownloadFile('https://aka.ms/wslubuntu2004', 'ubuntu.appx')
 
           Write-Host "Downloading finished."
 
           Write-Host "Installing..."
           Import-Module Appx
+          Get-Error
           Add-AppxPackage .\ubuntu.appx
           Write-Host "Install complete."
 
