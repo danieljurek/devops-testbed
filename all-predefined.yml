@@ -18,7 +18,7 @@ jobs:
 
           Write-Host "Extracting..."
           Expand-Archive ubuntu.appx.zip ./ubuntu/
-          Get-ChildtItem ubuntu/ -Recurse
+          Get-ChildItem ubuntu/ -Recurse
           Write-Host "Extraction complete" 
 
           Get-ChildItem "$($env:USERPROFILE)/ubuntu"
