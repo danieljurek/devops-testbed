@@ -7,6 +7,16 @@ jobs:
       SetAtVariable: YEP
     steps:
 
+      - pwsh: |
+          Write-Host "wsl --status"
+          wsl --status
+
+          Write-Host "wsl --list --all --verbose"
+          wsl --list --all --verbose
+
+          Write-Host "wsl echo 'hello world'"
+          wsl echo 'hello world'
+
       - pwsh: Write-Host "Hello world" 
         displayName: Set at variable -- $`(SetAtVariable)
 
