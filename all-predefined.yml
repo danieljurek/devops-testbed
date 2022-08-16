@@ -7,7 +7,21 @@ jobs:
       SetAtVariable: YEP
     steps:
 
-      - pwsh: | 
+      # Download WSL distributions directly
+      # https://docs.microsoft.com/en-us/windows/wsl/install-manual#downloading-distributions
+
+      - pwsh: |
+          Write-Host "Downloading..."
+          $client = New-Object System.Net.WebClient
+          $client.DownloadFile('https://aka.ms/wslubuntu2204', 'ubuntu.appx')
+
+          Write-Host "Downloading finished."
+
+          Write-Host "Installing..."
+          Add-AppxPackage .\ubuntu.appx
+          Write-Host "Install complete."
+
+      - pwsh: |
           wslconfig /help
           wslconfig /list /all
 
