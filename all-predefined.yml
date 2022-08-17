@@ -12,22 +12,24 @@ jobs:
 
       - powershell: |
           Write-Host "Downloading..."
-          $client = New-Object System.Net.WebClient
-          $client.DownloadFile('https://aka.ms/wslubuntu2004', 'ubuntu.appx.zip')
-          Write-Host "Downloading finished."
+          Start-BitsTransfer -Source 'https://aka.ms/wslubuntu2004' -Destination 'Ubuntu2004.appx'
+          Move-Item ./Ubuntu2004.appx ./Ubuntu2004.appx.zip
 
-          Write-Host "Extracting..."
-          Expand-Archive ubuntu.appx.zip ./ubuntu/
-          Get-ChildItem ubuntu/ -Recurse
-          Write-Host "Extraction complete" 
+          Write-Host "Expanding..."
+          Expand-Archive ./Ubuntu2004.appx.zip ./ubuntu-staging
+          $targetAppxFile = (Get-ChildItem ./ubuntu-staging).Where({ $_.Name -like '*_x64.appx'})
+          Write-Host $targetAppxFile
+          Copy-Item "./ubuntu-staging/$targetAppxFile" "./ubuntu-staging/$targetAppxFile.zip"
 
-          Write-Host "Installing..."
-          Import-Module Appx
-          Add-AppxPackage ./ubuntu/Ubuntu_2004.2021.825.0_x64.appx
-          Write-Host "Install complete."
+          Write-Host "Installing appx package..."
+          Add-AppxPackage "./ubuntu-staging/$targetAppxFile"
 
-          Get-ChildItem "$($env:USERPROFILE)"
-          Get-ChildItem . -Recurse
+          Write-Host "Expanding appx pacakge to get to ubuntu.exe..."
+          Expand-Archive "./ubuntu-staging/$targetAppxFile.zip" ./ubuntu
+
+          Write-Host "Running ubuntu.exe first time..."
+          ./ubuntu/ubuntu.exe install --root
+          ./ubuntu/ubuntu.exe run 'apt update'
 
       - pwsh: ubuntu.exe
 
