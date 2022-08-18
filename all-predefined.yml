@@ -31,6 +31,11 @@ jobs:
                   '/passive'
               ) `
               -Wait
+
+          Write-Host "Stopping squidsrv"
+          Stop-Service -Force -Name squidsrv
+
+          c:\squid\bin\squid.exe -f "c:\squid\etc\squid\squid.conf"
           Start-Sleep -Seconds 10
 
           Invoke-WebRequest 'http://example.com' -Proxy 'http://127.0.0.1:3128'
