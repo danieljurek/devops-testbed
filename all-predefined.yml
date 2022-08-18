@@ -7,54 +7,83 @@ jobs:
       SetAtVariable: YEP
     steps:
 
-      # Download WSL distributions directly
-      # https://docs.microsoft.com/en-us/windows/wsl/install-manual#downloading-distributions
-
-      - powershell: |
-          Write-Host "Downloading..."
-          Start-BitsTransfer -Source 'https://aka.ms/wslubuntu2004' -Destination 'Ubuntu2004.appx'
-          Move-Item ./Ubuntu2004.appx ./Ubuntu2004.appx.zip
-
-          Write-Host "Expanding..."
-          Expand-Archive ./Ubuntu2004.appx.zip ./ubuntu-staging
-          $targetAppxFile = (Get-ChildItem ./ubuntu-staging).Where({ $_.Name -like '*_x64.appx'})
-          Write-Host $targetAppxFile
-          Copy-Item "./ubuntu-staging/$targetAppxFile" "./ubuntu-staging/$targetAppxFile.zip"
-
-          Write-Host "Installing appx package..."
-          Add-AppxPackage "./ubuntu-staging/$targetAppxFile"
-
-          Write-Host "Expanding appx pacakge to get to ubuntu.exe..."
-          Expand-Archive "./ubuntu-staging/$targetAppxFile.zip" ./ubuntu
-
-          Write-Host "Running ubuntu.exe first time..."
-          ./ubuntu/ubuntu.exe install --root
-          ./ubuntu/ubuntu.exe run 'apt update'
-
-      - pwsh: ubuntu.exe
-
       - pwsh: |
-          wslconfig /help
-          wslconfig /list /all
+          $SquidSetupUrl = 'https://packages.diladele.com/squid/4.14/squid.msi'
+          $CygwinSetupUrl = 'https://www.cygwin.com/setup-x86_64.exe'
+          
+          Start-BitsTransfer -Source $SquidSetupUrl -Destination ./squid.msi
+          # Start-BitStransfer -Source $CygwinSetupUrl -Destination ./cygwin-setup.exe
 
-      - pwsh: |
-          Write-Host "wsl --status"
-          wsl --status
+          # Start-Process `
+          #     -FilePath ./cygwin-setup.exe `
+          #     -ArgumentList @(
+          #         '--download',
+          #         '--packages libcrypt2',
+          #         '--quiet-mode',
+          #         '--prune-install',
+          #         '--site http://www.gtlib.gatech.edu/pub/cygwin/'
+          #     ) `
+          #     -Wait
+          Start-Process `
+              -FilePath msiexec.exe `
+              -ArgumentList @(
+                  '/i squid.msi',
+                  '/passive'
+              ) `
+              -Wait
+          Start-Sleep -Seconds 10
 
-          Write-Host "wsl --list --all --verbose"
-          wsl --list --all --verbose
+          Invoke-WebRequest 'http://example.com' -Proxy 'http://127.0.0.1:3128'
 
-          Write-Host "wsl echo 'hello world'"
-          wsl echo 'hello world'
 
-      - pwsh: Write-Host "Hello world" 
-        displayName: Set at variable -- $`(SetAtVariable)
+      # # Download WSL distributions directly
+      # # https://docs.microsoft.com/en-us/windows/wsl/install-manual#downloading-distributions
 
-      - pwsh: Write-Host "Hello world" 
-        displayName: Set at queue-time -- $`(SetAtQueueTime)
+      # - powershell: |
+      #     Write-Host "Downloading..."
+      #     Start-BitsTransfer -Source 'https://aka.ms/wslubuntu2004' -Destination 'Ubuntu2004.appx'
+      #     Move-Item ./Ubuntu2004.appx ./Ubuntu2004.appx.zip
 
-      - pwsh: Write-Host "Hello world" 
-        displayName: Not set -- $`(NotSet)
+      #     Write-Host "Expanding..."
+      #     Expand-Archive ./Ubuntu2004.appx.zip ./ubuntu-staging
+      #     $targetAppxFile = (Get-ChildItem ./ubuntu-staging).Where({ $_.Name -like '*_x64.appx'})
+      #     Write-Host $targetAppxFile
+      #     Copy-Item "./ubuntu-staging/$targetAppxFile" "./ubuntu-staging/$targetAppxFile.zip"
+
+      #     Write-Host "Installing appx package..."
+      #     Add-AppxPackage "./ubuntu-staging/$targetAppxFile"
+
+      #     Write-Host "Expanding appx pacakge to get to ubuntu.exe..."
+      #     Expand-Archive "./ubuntu-staging/$targetAppxFile.zip" ./ubuntu
+
+      #     Write-Host "Running ubuntu.exe first time..."
+      #     ./ubuntu/ubuntu.exe install --root
+      #     ./ubuntu/ubuntu.exe run 'apt update'
+
+      # - pwsh: ubuntu.exe
+
+      # - pwsh: |
+      #     wslconfig /help
+      #     wslconfig /list /all
+
+      # - pwsh: |
+      #     Write-Host "wsl --status"
+      #     wsl --status
+
+      #     Write-Host "wsl --list --all --verbose"
+      #     wsl --list --all --verbose
+
+      #     Write-Host "wsl echo 'hello world'"
+      #     wsl echo 'hello world'
+
+      # - pwsh: Write-Host "Hello world" 
+      #   displayName: Set at variable -- $`(SetAtVariable)
+
+      # - pwsh: Write-Host "Hello world" 
+      #   displayName: Set at queue-time -- $`(SetAtQueueTime)
+
+      # - pwsh: Write-Host "Hello world" 
+      #   displayName: Not set -- $`(NotSet)
 
 
       # - pwsh: Write-Host "##vso[task.setvariable variable=PublishToVcpkg]true"
