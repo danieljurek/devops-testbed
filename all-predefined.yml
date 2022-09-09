@@ -1,22 +1,26 @@
 jobs:
   - job: predefineds
     pool:
-      vmImage: windows-2019
+      vmImage: ubuntu-latest
     variables:
       TEST_RUNTIME_SETTINGS: ONE
       SetAtVariable: YEP
     steps:
 
-      - pwsh: | 
-          Write-Host "##vso[task.setvariable variable=kebab-case-secret;issecret=true]TrulyASecret"
-        displayName: Set a secret
+      - pwsh: |
+          Write-Host "Build.Repository.Name: $(Build.Repository.Name)"
+          Write-Host "Build.Repository.Uri: $(Build.Repository.Uri)"
 
-      - pwsh: | 
-          Write-Host "$($env:SOME_SECRET)"
-          $reversed = $env:SOME_SECRET[-1..-$env:SOME_SECRET.Length] -join ''
-          Write-Host $reversed
-        env: 
-          SOME_SECRET: $(kebab-case-secret)
+      # - pwsh: | 
+      #     Write-Host "##vso[task.setvariable variable=kebab-case-secret;issecret=true]TrulyASecret"
+      #   displayName: Set a secret
+
+      # - pwsh: | 
+      #     Write-Host "$($env:SOME_SECRET)"
+      #     $reversed = $env:SOME_SECRET[-1..-$env:SOME_SECRET.Length] -join ''
+      #     Write-Host $reversed
+      #   env: 
+      #     SOME_SECRET: $(kebab-case-secret)
 
       # - pwsh: |
       #     $SquidSetupUrl = 'https://packages.diladele.com/squid/4.14/squid.msi'
