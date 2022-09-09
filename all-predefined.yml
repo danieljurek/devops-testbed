@@ -7,38 +7,49 @@ jobs:
       SetAtVariable: YEP
     steps:
 
-      - pwsh: |
-          $SquidSetupUrl = 'https://packages.diladele.com/squid/4.14/squid.msi'
-          $CygwinSetupUrl = 'https://www.cygwin.com/setup-x86_64.exe'
+      - pwsh: | 
+          Write-Host "##vso[task.setvariable variable=kebab-case-secret;issecret=true]TrulyASecret"
+        displayName: Set a secret
+
+      - pwsh: | 
+          Write-Host "$($env:SOME_SECRET)"
+          $reversed = $env:SOME_SECRET[-1..-$env:SOME_SECRET.Length] -join ''
+          Write-Host $reversed
+        env: 
+          SOME_SECRET: $(kebab-case-secret)
+
+      # - pwsh: |
+      #     $SquidSetupUrl = 'https://packages.diladele.com/squid/4.14/squid.msi'
+      #     $CygwinSetupUrl = 'https://www.cygwin.com/setup-x86_64.exe'
           
-          Start-BitsTransfer -Source $SquidSetupUrl -Destination ./squid.msi
-          # Start-BitStransfer -Source $CygwinSetupUrl -Destination ./cygwin-setup.exe
+      #     Start-BitsTransfer -Source $SquidSetupUrl -Destination ./squid.msi
+      #     # Start-BitStransfer -Source $CygwinSetupUrl -Destination ./cygwin-setup.exe
 
-          # Start-Process `
-          #     -FilePath ./cygwin-setup.exe `
-          #     -ArgumentList @(
-          #         '--download',
-          #         '--packages libcrypt2',
-          #         '--quiet-mode',
-          #         '--prune-install',
-          #         '--site http://www.gtlib.gatech.edu/pub/cygwin/'
-          #     ) `
-          #     -Wait
-          Start-Process `
-              -FilePath msiexec.exe `
-              -ArgumentList @(
-                  '/i squid.msi',
-                  '/passive'
-              ) `
-              -Wait
+      #     # Start-Process `
+      #     #     -FilePath ./cygwin-setup.exe `
+      #     #     -ArgumentList @(
+      #     #         '--download',
+      #     #         '--packages libcrypt2',
+      #     #         '--quiet-mode',
+      #     #         '--prune-install',
+      #     #         '--site http://www.gtlib.gatech.edu/pub/cygwin/'
+      #     #     ) `
+      #     #     -Wait
+      #     Start-Process `
+      #         -FilePath msiexec.exe `
+      #         -ArgumentList @(
+      #             '/i squid.msi',
+      #             '/passive'
+      #         ) `
+      #         -Wait
 
-          Write-Host "Stopping squidsrv"
-          Stop-Service -Force -Name squidsrv
+      #     Write-Host "Stopping squidsrv"
+      #     Stop-Service -Force -Name squidsrv
 
-          c:\squid\bin\squid.exe -f "c:\squid\etc\squid\squid.conf"
-          Start-Sleep -Seconds 10
+      #     c:\squid\bin\squid.exe -f "c:\squid\etc\squid\squid.conf"
+      #     Start-Sleep -Seconds 10
 
-          Invoke-WebRequest 'http://example.com' -Proxy 'http://127.0.0.1:3128'
+      #     Invoke-WebRequest 'http://example.com' -Proxy 'http://127.0.0.1:3128'
 
 
       # # Download WSL distributions directly
