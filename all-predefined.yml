@@ -8,10 +8,24 @@ jobs:
       SetAtVariable: YEP
     steps:
 
-      - pwsh: | 
-          Get-Command vcpkg.exe
-          Get-ChildItem c:\
-        displayName: Show me the vcpkg
+      - pwsh: |
+          git clone https://github.com/microsoft/vcpkg
+
+          Set-Location vcpkg
+          ./bootstrap-vcpkg.bat
+          Get-Command ./vcpkg.exe
+          Write-Host "VCPKG_ROOT: $($env:VCPKG_ROOT)"
+
+          Write-Host "./vcpkg.exe x-add-version azure-storage-blobs-cpp"
+          ./vcpkg.exe x-add-version azure-storage-blobs-cpp
+          
+          $correctPath = Resolve-Path . 
+
+          Write-Host "Set VCPKG_ROOT: $correctPath"
+          Write-Host "./vcpkg.exe x-add-version azure-storage-blobs-cpp"
+          ./vcpkg.exe x-add-version azure-storage-blobs-cpp 
+
+        displayName: Clone vcpkg, attempt to update version 
 
       # - pwsh: |
       #     Write-Host "Build.Repository.Name: $(Build.Repository.Name)"
