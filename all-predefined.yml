@@ -1,15 +1,21 @@
 jobs:
   - job: predefineds
     pool:
-      vmImage: ubuntu-latest
+      # vmImage: ubuntu-latest
+      vmImage: windows-2019
     variables:
       TEST_RUNTIME_SETTINGS: ONE
       SetAtVariable: YEP
     steps:
 
-      - pwsh: |
-          Write-Host "Build.Repository.Name: $(Build.Repository.Name)"
-          Write-Host "Build.Repository.Uri: $(Build.Repository.Uri)"
+      - pwsh: | 
+          Get-Command vcpkg.exe
+          Get-ChildItem c:\
+        displayName: Show me the vcpkg
+
+      # - pwsh: |
+      #     Write-Host "Build.Repository.Name: $(Build.Repository.Name)"
+      #     Write-Host "Build.Repository.Uri: $(Build.Repository.Uri)"
 
       # - pwsh: | 
       #     Write-Host "##vso[task.setvariable variable=kebab-case-secret;issecret=true]TrulyASecret"
