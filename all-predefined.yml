@@ -1,5 +1,5 @@
 jobs:
-  - job: screencap_macos
+  - job: MacOS_Screencap_Test
     strategy:
       matrix: 
         MacOs11: 
@@ -9,13 +9,19 @@ jobs:
     pool:
       vmImage: $(OSVmImage)
     steps: 
+      - pwsh: Write-Host "Success!"
+        displayName: Succeed
+
       - pwsh: |
           New-Item -ItemType Directory -Name screencap
           screencapture -t png screencap/screencap.png
+        condition: and(failed(), eq('Darwin', variables['Agent.OS']))
+        displayName: Capture screenshot (MacOS, failure)
 
       - publish: screencap/
-        artifact: $(Agent.JobName)_screencap
-        condition: always()
+        artifact: $(Agent.JobName)_screencap_attempt_$(System.JobAttempt)
+        condition: and(failed(), eq('Darwin', variables['Agent.OS']))
+        displayName: Upload screenshot (MacOS, failure)
 
   - job: predefineds
     pool:
