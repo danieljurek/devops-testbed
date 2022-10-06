@@ -6,17 +6,19 @@ jobs:
           OSVmImage: macOS-11
         MacOs12: 
           OSVmImage: macOS-12
+        Ubuntu:
+          OSVmImage: ubuntu-latest
     pool:
       vmImage: $(OSVmImage)
     steps: 
       - pwsh: Write-Host "Success!"
         displayName: Succeed
 
-      - bash: osascript -e 'tell application (path to frontmost application as text) to display dialog "Testing dialog for screenshot" buttons {"OK"} with icon stop' &
-        displayName: Display a dialog
+      # - bash: osascript -e 'tell application (path to frontmost application as text) to display dialog "Testing dialog for screenshot" buttons {"OK"} with icon stop' &
+      #   displayName: Display a dialog
 
-      - pwsh: Write-Error "Error!"; exit 1;
-        displayName: Failed
+      # - pwsh: Write-Error "Error!"; exit 1;
+      #   displayName: Failed
 
       - pwsh: |
           New-Item -ItemType Directory -Name screencap
