@@ -12,6 +12,9 @@ jobs:
       - pwsh: Write-Host "Success!"
         displayName: Succeed
 
+      - pwsh: Write-Error "Error!"; exit 1;
+        displayName: Failed
+
       - pwsh: |
           New-Item -ItemType Directory -Name screencap
           screencapture -t png screencap/screencap.png
