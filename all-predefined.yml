@@ -1,4 +1,22 @@
 jobs:
+  - job: screencap_macos
+    strategy:
+      matrix: 
+        MacOs11: 
+          OSVmImage: macOS-11
+        MacOs12: 
+          OSVmImage: macOS-12
+    pool:
+      vmImage: $(OSVmImage)
+    steps: 
+      - pwsh: |
+          New-Item -ItemType Directory -Name screencap
+          screencapture -t png screencap/screencap.png
+
+      - publish: screencap/
+        artifact: $(Agent.JobName)_screencap
+        condition: always()
+
   - job: predefineds
     pool:
       # vmImage: ubuntu-latest
