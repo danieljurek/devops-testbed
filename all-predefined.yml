@@ -30,6 +30,8 @@ jobs:
     variables:
       TEST_RUNTIME_SETTINGS: ONE
       SetAtVariable: YEP
+
+    dependsOn: publish
     
     steps:
       - task: UniversalPackages@0
