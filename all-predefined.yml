@@ -1,283 +1,46 @@
 jobs:
-  - job: MacOS_Screencap_Test
-    strategy:
-      matrix: 
-        MacOs11: 
-          OSVmImage: macOS-11
-        MacOs12: 
-          OSVmImage: macOS-12
-        Ubuntu:
-          OSVmImage: ubuntu-latest
-    pool:
-      vmImage: $(OSVmImage)
-    steps: 
-      - pwsh: Write-Host "Success!"
-        displayName: Succeed
-
-      - bash: osascript -e 'tell application (path to frontmost application as text) to display dialog "Testing dialog for screenshot" buttons {"OK"} with icon stop' &
-        displayName: Display a dialog
-
-      - pwsh: Write-Error "Error!"; exit 1;
-        displayName: Failed
-
-      - pwsh: |
-          New-Item -ItemType Directory -Name screencap
-          screencapture -t png screencap/screencap.png
-        condition: and(failed(), eq('Darwin', variables['Agent.OS']))
-        displayName: Capture screenshot (MacOS, failure)
-
-      - publish: screencap/
-        artifact: $(Agent.JobName)_screencap_attempt_$(System.JobAttempt)
-        condition: and(failed(), eq('Darwin', variables['Agent.OS']))
-        displayName: Upload screenshot (MacOS, failure)
-
-  - job: predefineds
+  - job: publish
     pool:
       # vmImage: ubuntu-latest
       vmImage: windows-2019
     variables:
       TEST_RUNTIME_SETTINGS: ONE
       SetAtVariable: YEP
+
     steps:
+      - pwsh: |
+          New-Item -ItemType Directory -Path publishdir
+          "Hello world" | Set-Content  publishdir/test.txt
+        displayName: Write to test.txt
+
+      - task: UniversalPackages@0
+        displayName: Universal Publish
+        inputs:
+          command: publish
+          publishDirectory: publish
+          vstsFeedPublish: 'playground/djurek-test-artifact-feed'
+          vstsFeedPackagePublish: 'test-universal-package'
+          versionOption: minor
+          packagePublishDescription: A simple test of publishing funcitonality
+
+  - job: consume
+    pool:
+      # vmImage: ubuntu-latest
+      vmImage: windows-2019
+    variables:
+      TEST_RUNTIME_SETTINGS: ONE
+      SetAtVariable: YEP
+    
+    steps:
+      - task: UniversalPackages@0
+        displayName: 'Universal download'
+        inputs:
+          command: download
+          vstsFeed: 'playground/djurek-test-artifact-feed'
+          vstsFeedPackage: 'test-universal-package'
+          downloadDirectory: '$(Build.SourcesDirectory)\someFolder'
 
       - pwsh: |
-          git clone https://github.com/microsoft/vcpkg
-
-          Set-Location vcpkg
-          ./bootstrap-vcpkg.bat
-          Get-Command ./vcpkg.exe
-          Write-Host "VCPKG_ROOT: $($env:VCPKG_ROOT)"
-
-          Write-Host "./vcpkg.exe x-add-version azure-storage-blobs-cpp"
-          ./vcpkg.exe x-add-version azure-storage-blobs-cpp
-          
-          $correctPath = Resolve-Path . 
-
-          Write-Host "Set VCPKG_ROOT: $correctPath"
-          Write-Host "./vcpkg.exe x-add-version azure-storage-blobs-cpp"
-          ./vcpkg.exe x-add-version azure-storage-blobs-cpp 
-
-        displayName: Clone vcpkg, attempt to update version 
-
-      # - pwsh: |
-      #     Write-Host "Build.Repository.Name: $(Build.Repository.Name)"
-      #     Write-Host "Build.Repository.Uri: $(Build.Repository.Uri)"
-
-      # - pwsh: | 
-      #     Write-Host "##vso[task.setvariable variable=kebab-case-secret;issecret=true]TrulyASecret"
-      #   displayName: Set a secret
-
-      # - pwsh: | 
-      #     Write-Host "$($env:SOME_SECRET)"
-      #     $reversed = $env:SOME_SECRET[-1..-$env:SOME_SECRET.Length] -join ''
-      #     Write-Host $reversed
-      #   env: 
-      #     SOME_SECRET: $(kebab-case-secret)
-
-      # - pwsh: |
-      #     $SquidSetupUrl = 'https://packages.diladele.com/squid/4.14/squid.msi'
-      #     $CygwinSetupUrl = 'https://www.cygwin.com/setup-x86_64.exe'
-          
-      #     Start-BitsTransfer -Source $SquidSetupUrl -Destination ./squid.msi
-      #     # Start-BitStransfer -Source $CygwinSetupUrl -Destination ./cygwin-setup.exe
-
-      #     # Start-Process `
-      #     #     -FilePath ./cygwin-setup.exe `
-      #     #     -ArgumentList @(
-      #     #         '--download',
-      #     #         '--packages libcrypt2',
-      #     #         '--quiet-mode',
-      #     #         '--prune-install',
-      #     #         '--site http://www.gtlib.gatech.edu/pub/cygwin/'
-      #     #     ) `
-      #     #     -Wait
-      #     Start-Process `
-      #         -FilePath msiexec.exe `
-      #         -ArgumentList @(
-      #             '/i squid.msi',
-      #             '/passive'
-      #         ) `
-      #         -Wait
-
-      #     Write-Host "Stopping squidsrv"
-      #     Stop-Service -Force -Name squidsrv
-
-      #     c:\squid\bin\squid.exe -f "c:\squid\etc\squid\squid.conf"
-      #     Start-Sleep -Seconds 10
-
-      #     Invoke-WebRequest 'http://example.com' -Proxy 'http://127.0.0.1:3128'
-
-
-      # # Download WSL distributions directly
-      # # https://docs.microsoft.com/en-us/windows/wsl/install-manual#downloading-distributions
-
-      # - powershell: |
-      #     Write-Host "Downloading..."
-      #     Start-BitsTransfer -Source 'https://aka.ms/wslubuntu2004' -Destination 'Ubuntu2004.appx'
-      #     Move-Item ./Ubuntu2004.appx ./Ubuntu2004.appx.zip
-
-      #     Write-Host "Expanding..."
-      #     Expand-Archive ./Ubuntu2004.appx.zip ./ubuntu-staging
-      #     $targetAppxFile = (Get-ChildItem ./ubuntu-staging).Where({ $_.Name -like '*_x64.appx'})
-      #     Write-Host $targetAppxFile
-      #     Copy-Item "./ubuntu-staging/$targetAppxFile" "./ubuntu-staging/$targetAppxFile.zip"
-
-      #     Write-Host "Installing appx package..."
-      #     Add-AppxPackage "./ubuntu-staging/$targetAppxFile"
-
-      #     Write-Host "Expanding appx pacakge to get to ubuntu.exe..."
-      #     Expand-Archive "./ubuntu-staging/$targetAppxFile.zip" ./ubuntu
-
-      #     Write-Host "Running ubuntu.exe first time..."
-      #     ./ubuntu/ubuntu.exe install --root
-      #     ./ubuntu/ubuntu.exe run 'apt update'
-
-      # - pwsh: ubuntu.exe
-
-      # - pwsh: |
-      #     wslconfig /help
-      #     wslconfig /list /all
-
-      # - pwsh: |
-      #     Write-Host "wsl --status"
-      #     wsl --status
-
-      #     Write-Host "wsl --list --all --verbose"
-      #     wsl --list --all --verbose
-
-      #     Write-Host "wsl echo 'hello world'"
-      #     wsl echo 'hello world'
-
-      # - pwsh: Write-Host "Hello world" 
-      #   displayName: Set at variable -- $`(SetAtVariable)
-
-      # - pwsh: Write-Host "Hello world" 
-      #   displayName: Set at queue-time -- $`(SetAtQueueTime)
-
-      # - pwsh: Write-Host "Hello world" 
-      #   displayName: Not set -- $`(NotSet)
-
-
-      # - pwsh: Write-Host "##vso[task.setvariable variable=PublishToVcpkg]true"
-      #   displayName: Set PublishToVcpkg to true
-
-      # - pwsh: Write-Host "##vso[task.setvariable variable=HasChanges]true"
-      #   displayName: Set HasChanges to true
-
-      # - template: /test-template.yml
-      #   parameters:
-      #     SkipCheckingForChanges: variables['PublishToVcpkg']
-      #     # SkipCheckingForChanges: false
-
-      # - pwsh: |
-      #     $urlBase = "https://example.com/"
-      #     Write-Host "##vso[task.setvariable variable=UrlBase;isOutput=true]$urlBase"
-      #   name: GenerateUrlBase
-      #   displayName: Set UrlBase
-
-      # - pwsh: Write-Host "$(GenerateUrlBase.UrlBase)"
-
-      # - pwsh: |
-      #     Write-Host "Build.Repository.Uri: $(Build.Repository.Uri)"
-      #   displayName: Build.Repository.Uri
-      # - pwsh: |
-      #     Write-Host 'TEST_RUNTIME_SETTINGS: $(TEST_RUNTIME_SETTINGS)'
-      #     Write-Host "Assign: TWO"
-      #     Write-Host "##vso[task.setvariable variable=TEST_RUNTIME_SETTINGS;]TWO"
-      #   displayName: Set TEST_RUNTIME_SETTINGS
-
-
-      # - pwsh: |
-      #     Write-Host "TEST_RUNTIME_SETTINGS: $(TEST_RUNTIME_SETTINGS)"
-      #   displayName: Show TEST_RUNTIME_SETTINGS after setting
-
-
-      # - pwsh: |
-      #     Write-Host "GIT_TERMINAL_PROMPT: $($env:GIT_TERMINAL_PROMPT)"
-      #   displayName: GIT_TERMINAL_PROMPT
-
-      # - task: PowerShell@2
-      #   inputs:
-      #     targetType: inline
-      #     script: Get-Host
-      #     pwsh: false
-      # - pwsh: |
-      #     Write-Host "Build.Repository.Name -> $(Build.Repository.Name)"
-      #   displayName: Variables
-
-      # TODO: Use something other than echo, especially on windows
-      # - script: |
-      #     echo "===AGENT VARIABLES==="
-      #     echo Agent.BuildDirectory -> $(Agent.BuildDirectory)
-      #     echo Agent.HomeDirectory -> $(Agent.HomeDirectory)
-      #     echo Agent.Id -> $(Agent.Id)
-      #     echo Agent.JobName -> $(Agent.JobName)
-      #     echo Agent.JobStatus -> $(Agent.JobStatus)
-      #     echo Agent.MachineName -> $(Agent.MachineName)
-      #     echo Agent.Name -> $(Agent.Name)
-      #     echo Agent.OS -> $(Agent.OS)
-      #     echo Agent.OSArchitecture -> $(Agent.OSArchitecture)
-      #     echo Agent.TempDirectory -> $(Agent.TempDirectory)
-      #     echo Agent.ToolsDirectory -> $(Agent.ToolsDirectory)
-      #     echo Agent.WorkFolder -> $(Agent.WorkFolder)
-
-      #     echo "===BUILD VARIABLES==="
-      #     echo Build.ArtifactStagingDirectory -> $(Build.ArtifactStagingDirectory)
-      #     echo Build.BuildId -> $(Build.BuildId)
-      #     echo Build.BuildNumber -> $(Build.BuildNumber)
-      #     echo Build.BuildUri -> $(Build.BuildUri)
-      #     echo Build.BinariesDirectory -> $(Build.BinariesDirectory)
-      #     echo Build.DefinitionName -> $(Build.DefinitionName)
-      #     echo Build.DefinitionVersion -> $(Build.DefinitionVersion)
-      #     echo Build.QueuedBy -> $(Build.QueuedBy)
-      #     echo Build.QueuedById -> $(Build.QueuedById)
-      #     echo Build.ReasonBuild.Repository.Clean -> $(Build.ReasonBuild.Repository.Clean)
-      #     echo Build.Repository.LocalPath -> $(Build.Repository.LocalPath)
-      #     echo Build.Repository.ID -> $(Build.Repository.ID)
-      #     echo Build.Repository.Name -> $(Build.Repository.Name)
-      #     echo Build.Repository.Provider -> $(Build.Repository.Provider)
-      #     echo Build.Repository.Tfvc.WorkspaceBuild.Repository.UriBuild.RequestedFor -> $(Build.Repository.Tfvc.WorkspaceBuild.Repository.UriBuild.RequestedFor)
-      #     echo Build.RequestedForEmail -> $(Build.RequestedForEmail)
-      #     echo Build.RequestedForId -> $(Build.RequestedForId)
-      #     echo Build.SourceBranch -> $(Build.SourceBranch)
-      #     echo Build.SourceBranchName -> $(Build.SourceBranchName)
-      #     echo Build.SourcesDirectory -> $(Build.SourcesDirectory)
-      #     echo Build.SourceVersionBuild.SourceVersionMessageBuild.StagingDirectory -> $(Build.SourceVersionBuild.SourceVersionMessageBuild.StagingDirectory)
-      #     echo Build.Repository.Git.SubmoduleCheckout -> $(Build.Repository.Git.SubmoduleCheckout)
-      #     echo Build.SourceTfvcShelvesetBuild.TriggeredBy.BuildId -> $(Build.SourceTfvcShelvesetBuild.TriggeredBy.BuildId)
-      #     echo Build.TriggeredBy.DefinitionId -> $(Build.TriggeredBy.DefinitionId)
-      #     echo Build.TriggeredBy.DefinitionName -> $(Build.TriggeredBy.DefinitionName)
-      #     echo Build.TriggeredBy.BuildNumber -> $(Build.TriggeredBy.BuildNumber)
-      #     echo Build.TriggeredBy.ProjectID -> $(Build.TriggeredBy.ProjectID)
-      #     echo Common.TestResultsDirectory -> $(Common.TestResultsDirectory)
-
-      #     echo "===PIPELINE VARIABLES==="
-      #     echo Pipeline.Workspace -> $(Pipeline.Workspace)
-
-      #     echo "===DEPLOYMENT JOB VARIABLES==="
-      #     echo Environment.Name -> $(Environment.Name)
-      #     echo Environment.Id -> $(Environment.Id)
-      #     echo Environment.ResourceName -> $(Environment.ResourceName)
-      #     echo Environment.ResourceId -> $(Environment.ResourceId)
-
-      #     echo "===SYSTEM VARIABLES==="
-      #     echo System.HostType -> $(System.HostType)
-      #     echo System.JobAttempt -> $(System.JobAttempt)
-      #     echo System.JobDisplayName -> $(System.JobDisplayName)
-      #     echo System.JobName -> $(System.JobName)
-      #     echo System.PhaseAttempt -> $(System.PhaseAttempt)
-      #     echo System.PhaseDisplayName -> $(System.PhaseDisplayName)
-      #     echo System.PhaseName -> $(System.PhaseName)
-      #     echo System.StageAttempt -> $(System.StageAttempt)
-      #     echo System.StageDisplayName -> $(System.StageDisplayName)
-      #     echo System.StageName -> $(System.StageName)
-      #     echo System.PullRequest.IsFork -> $(System.PullRequest.IsFork)
-      #     echo System.PullRequest.PullRequestId -> $(System.PullRequest.PullRequestId)
-      #     echo System.PullRequest.PullRequestNumber -> $(System.PullRequest.PullRequestNumber)
-      #     echo System.PullRequest.SourceBranch -> $(System.PullRequest.SourceBranch)
-      #     echo System.PullRequest.SourceRepositoryURI -> $(System.PullRequest.SourceRepositoryURI)
-      #     echo System.PullRequest.TargetBranch -> $(System.PullRequest.TargetBranch)
-      #     echo System.TeamFoundationCollectionUri -> $(System.TeamFoundationCollectionUri)
-      #     echo System.TeamProject -> $(System.TeamProject)
-      #     echo System.TeamProjectId -> $(System.TeamProjectId)
-      #     echo TF_BUILD -> $(TF_BUILD)
+          Get-ChildItem $(Build.SourcesDirectory)\someFolder
+          Get-ChildItem $(Build.SourcesDirectory)\someFolder | Get-Content
+        displayName: Show file content
