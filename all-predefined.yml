@@ -38,6 +38,7 @@ jobs:
         displayName: 'Universal download'
         inputs:
           command: download
+          vstsPackageVersion: 0.*
           vstsFeed: 'playground/djurek-test-artifact-feed'
           vstsFeedPackage: 'test-universal-package'
           downloadDirectory: '$(Build.SourcesDirectory)\someFolder'
