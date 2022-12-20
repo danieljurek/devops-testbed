@@ -16,9 +16,14 @@ jobs:
       - pwsh: |
           function assertGoodExit { 
             if ($LASTEXITCODE) { 
-              Write-Host "ERROR: Last exit code: $LASTEXITCODE" 
+              Write-Host "ERROR: Last exit code: $LASTEXITCODE"
+              exit $LASTEXITCODE
             }
           }
+          Write-Host "wsl.exe --update"
+          wsl.exe --update
+          assertGoodExit
+
           Write-Host "wsl --status" 
           wsl --status 
           assertGoodExit
