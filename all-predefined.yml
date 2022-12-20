@@ -31,6 +31,9 @@ jobs:
 
           Write-Host "Get-Service"
           Get-Service 
+
+          Write-Host "sc query type=service"
+          sc query type=service
           
           Write-Host "Get-Service WslService"
           Get-Service WslService
