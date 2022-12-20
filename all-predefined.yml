@@ -29,6 +29,12 @@ jobs:
           # wsl.exe --update
           # assertGoodExit
 
+          Write-Host "Get-Service"
+          Get-Service 
+          
+          Write-Host "Get-Service WslService"
+          Get-Service WslService
+
           Write-Host "wsl --status" 
           wsl --status 
           assertGoodExit
