@@ -20,6 +20,11 @@ jobs:
               exit $LASTEXITCODE
             }
           }
+
+          Write-Host "wsl.exe --set-version 2"
+          wsl.exe --set-version 2
+          assertGoodExit
+
           Write-Host "wsl.exe --update"
           wsl.exe --update
           assertGoodExit
