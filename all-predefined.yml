@@ -21,13 +21,13 @@ jobs:
             }
           }
 
-          Write-Host "wsl.exe wsl --set-default-version 2"
-          wsl.exe wsl --set-default-version 2
-          assertGoodExit
+          # Write-Host "wsl.exe wsl --set-default-version 2"
+          # wsl.exe wsl --set-default-version 2
+          # assertGoodExit
 
-          Write-Host "wsl.exe --update"
-          wsl.exe --update
-          assertGoodExit
+          # Write-Host "wsl.exe --update"
+          # wsl.exe --update
+          # assertGoodExit
 
           Write-Host "wsl --status" 
           wsl --status 
