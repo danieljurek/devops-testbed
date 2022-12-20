@@ -1,49 +1,36 @@
 jobs:
-  - job: publish
-    pool:
-      # vmImage: ubuntu-latest
-      vmImage: windows-2019
-    variables:
-      TEST_RUNTIME_SETTINGS: ONE
-      SetAtVariable: YEP
+  - job: TryWsl
+
+    strategy:
+      matrix: 
+        m1: {}
+        m2: {}
+        m3: {}
+        m4: {}
+        m5: {}
+      maxParallel: 3
+
+    pool: azsdk-pool-mms-win-2022-general
 
     steps:
       - pwsh: |
-          New-Item -ItemType Directory -Path publishdir
-          "Hello world" | Set-Content  publishdir/test.txt
-        displayName: Write to test.txt
+          write-host "WSL install of ubuntu."
+          wsl --install -d Ubuntu-20.04
 
-      - task: UniversalPackages@0
-        displayName: Universal Publish
-        inputs:
-          command: publish
-          publishDirectory: publishdir
-          vstsFeedPublish: 'playground/djurek-test-artifact-feed'
-          vstsFeedPackagePublish: 'test-universal-package'
-          versionOption: minor
-          packagePublishDescription: A simple test of publishing funcitonality
+          write-host "Launch WSL."
+          [console]::OutputEncoding = New-Object System.Text.UnicodeEncoding
+          $wsl = wsl -l -v | out-string
 
-  - job: consume
-    pool:
-      # vmImage: ubuntu-latest
-      vmImage: windows-2019
-    variables:
-      TEST_RUNTIME_SETTINGS: ONE
-      SetAtVariable: YEP
+          write-host $wsl
+          while ($wsl -notmatch 'Ubuntu-20.04.*running') {
+            start-sleep -seconds 1
+            $wsl = wsl -l -v | out-string
+            write-host $wsl
+          }
+          write-host "Ubuntu installed."
+        displayName: Install WSL
 
-    dependsOn: publish
-    
-    steps:
-      - task: UniversalPackages@0
-        displayName: 'Universal download'
-        inputs:
-          command: download
-          vstsPackageVersion: 0.*
-          vstsFeed: 'playground/djurek-test-artifact-feed'
-          vstsFeedPackage: 'test-universal-package'
-          downloadDirectory: '$(Build.SourcesDirectory)\someFolder'
-
-      - pwsh: |
-          Get-ChildItem $(Build.SourcesDirectory)\someFolder
-          Get-ChildItem $(Build.SourcesDirectory)\someFolder | Get-Content
-        displayName: Show file content
+      - pwsh: | 
+          wsl sudo apt-get update
+          wsl sudo apt-get -y install squid
+        displayName: Install squid
