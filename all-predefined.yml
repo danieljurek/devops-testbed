@@ -32,6 +32,9 @@ jobs:
           Write-Host "sc query type=service"
           sc query type=service
 
+          Write-Host "Get-WindowsOptionalFeature -Online"
+          Get-WindowsOptionalFeature -Online
+          
           # Write-Host "Get-Service"
           # Get-Service 
           
