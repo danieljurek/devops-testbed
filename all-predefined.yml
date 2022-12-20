@@ -14,18 +14,40 @@ jobs:
 
     steps:
       - pwsh: |
+          function assertGoodExit { 
+            if ($LASTEXITCODE) { 
+              Write-Host "ERROR: Last exit code: $LASTEXITCODE" 
+            }
+          }
+          Write-Host "wsl --status" 
+          wsl --status 
+          assertGoodExit
+
+          Write-Host "wsl --list --all --online" 
+          wsl --list --all --online
+          assertGoodExit
+
           write-host "WSL install of ubuntu."
-          wsl --install -d Ubuntu-20.04
+          Write-Host "wsl --install -d Ubuntu-20.04 --no-launch"
+          wsl --install -d Ubuntu-20.04 --no-launch 
+          assertGoodExit
 
           write-host "Launch WSL."
+          wsl
           [console]::OutputEncoding = New-Object System.Text.UnicodeEncoding
           $wsl = wsl -l -v | out-string
+          assertGoodExit
 
           write-host $wsl
           while ($wsl -notmatch 'Ubuntu-20.04.*running') {
             start-sleep -seconds 1
             $wsl = wsl -l -v | out-string
+            assertGoodExit
             write-host $wsl
+
+            Write-Host "wsl --status"
+            wsl --status
+            assertGoodExit
           }
           write-host "Ubuntu installed."
         displayName: Install WSL
