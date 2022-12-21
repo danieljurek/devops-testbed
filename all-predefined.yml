@@ -3,46 +3,53 @@ jobs:
     pool: azsdk-pool-mms-win-2022-general
 
     steps:
-      - pwsh: |
-          function assertGoodExit { 
-            if ($LASTEXITCODE) { 
-              Write-Host "ERROR: Last exit code: $LASTEXITCODE"
-              # exit $LASTEXITCODE
-            }
-          }
+      # - pwsh: |
+      #     function assertGoodExit { 
+      #       if ($LASTEXITCODE) { 
+      #         Write-Host "ERROR: Last exit code: $LASTEXITCODE"
+      #         # exit $LASTEXITCODE
+      #       }
+      #     }
 
-          Write-Host "wsl --status" 
-          wsl --status 
+      #     Write-Host "wsl --status" 
+      #     wsl --status 
 
-          Write-Host "wsl --list --online" 
-          wsl --list --online
+      #     Write-Host "wsl --list --online" 
+      #     wsl --list --online
 
-          write-host "WSL install of ubuntu."
-          Write-Host "wsl --install -d Ubuntu-20.04"
-          wsl --install -d Ubuntu-20.04
-          assertGoodExit
+      #     write-host "WSL install of ubuntu."
+      #     Write-Host "wsl --install -d Ubuntu-20.04"
+      #     wsl --install -d Ubuntu-20.04
+      #     assertGoodExit
 
-          # Console encoding? 
-          Write-Host [console]::OutputEncoding 
-          #= New-Object System.Text.UnicodeEncoding
-          Write-Host $OutputEncoding 
+      #     # Console encoding? 
+      #     Write-Host [console]::OutputEncoding 
+      #     #= New-Object System.Text.UnicodeEncoding
+      #     Write-Host $OutputEncoding 
 
 
-          Write-Host "wsl --list --all --verbose | out-string"
-          $wsl = wsl --list --all --verbose | out-string
-          write-host $wsl
+      #     Write-Host "wsl --list --all --verbose | out-string"
+      #     $wsl = wsl --list --all --verbose | out-string
+      #     write-host $wsl
 
-          while ($wsl -notmatch 'Ubuntu-20.04.*running') {
-            start-sleep -seconds 1
-            Write-Host "wsl --list --all --verbose | out-string"
-            $wsl = wsl --list --all --verbose | out-string
-            write-host $wsl
+      #     while ($wsl -notmatch 'Ubuntu-20.04.*running') {
+      #       start-sleep -seconds 1
+      #       Write-Host "wsl --list --all --verbose | out-string"
+      #       $wsl = wsl --list --all --verbose | out-string
+      #       write-host $wsl
 
-            Write-Host "wsl --status"
-            wsl --status
-          }
-          write-host "Ubuntu installed."
-        displayName: Install WSL
+      #       Write-Host "wsl --status"
+      #       wsl --status
+      #     }
+      #     write-host "Ubuntu installed."
+      #   displayName: Install WSL
+
+      - pwsh: ./Log-WSL.ps1
+        displayName: Log WSL behavior
+
+      - publish: WslLogs
+        artifact: WslLogs
+        condition: always()
 
       - pwsh: | 
           wsl sudo apt-get update
