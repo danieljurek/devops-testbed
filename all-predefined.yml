@@ -23,8 +23,8 @@ jobs:
       vmImage: $(VmImage)
 
     steps:
-      - pwsh: bash.exe -c "pwd; ls; cat /etc/lsb-release; apt update; lsb_release -a"
-        displayName: bash.exe -c "lsb_release -a"
+      # - pwsh: bash.exe -c "pwd; ls; cat /etc/lsb-release; apt update; lsb_release -a"
+      #   displayName: bash.exe -c "lsb_release -a"
 
       - pwsh: |
           Write-Host "wsl --status" 
