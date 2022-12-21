@@ -14,8 +14,8 @@ jobs:
           Write-Host "wsl --status" 
           wsl --status 
 
-          Write-Host "wsl --list --all --online" 
-          wsl --list --all --online
+          Write-Host "wsl --list --online" 
+          wsl --list --online
 
           exit 1
 
