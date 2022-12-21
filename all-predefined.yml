@@ -6,16 +6,8 @@ jobs:
           Pool: Azure Pipelines
           VmImage: windows-2022
 
-        PipelinesHostedPool2019:
-          Pool: Azure Pipelines
-          VmImage: windows-2019
-
         SelfHostedPool2022: 
           Pool: azsdk-pool-mms-win-2022-general
-          VmImage: __UNUSED__
-
-        SelfHostedPool2019: 
-          Pool: azsdk-pool-mms-win-2019-general
           VmImage: __UNUSED__
 
     pool:
