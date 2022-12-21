@@ -23,7 +23,7 @@ jobs:
       vmImage: $(VmImage)
 
     steps:
-      - pwsh: Run bash.exe
+      - pwsh: bash.exe -c "lsb_release -a"
         displayName: bash.exe -c "lsb_release -a"
 
       - pwsh: |
