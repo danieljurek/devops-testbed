@@ -32,10 +32,25 @@ wpr.exe -start $LogProfile -filemode
 
 Write-Host -NoNewLine -ForegroundColor Green "Log collection is running. Please reproduce the problem and press any key to save the logs."
 
-wsl --status 
-wsl --list --online
-wsl --install -d Ubuntu-20.04
-wsl --list --all --verbose
+$success = $false
+for ($tries = 0; $tries -lt 10; $tries = $tries + 1)
+{
+    Write-Host "Attempt: $tries"
+    wsl --status 
+    wsl --list --online
+    wsl --install -d Ubuntu-20.04
+    if ($LASTEXITCODE -eq 0) { 
+        Write-Host "SUCCESS!!!"
+        $success = $true
+    } 
+    wsl --list --all --verbose
+
+    if ($success) { 
+        break
+    }
+
+    Start-Sleep -Seconds 10
+}
 
 
 Write-Host "`nSaving logs..."
