@@ -27,9 +27,11 @@ jobs:
           Write-Host "wsl --list --all --online" 
           wsl --list --all --online
 
+          exit 1
+
           write-host "WSL install of ubuntu."
-          Write-Host "wsl --install -d Ubuntu-20.04 --no-launch"
-          wsl --install -d Ubuntu-20.04 --no-launch 
+          Write-Host "wsl --install -d Ubuntu-20.04"
+          wsl --install -d Ubuntu-20.04 
           assertGoodExit
 
           write-host "Launch WSL."
