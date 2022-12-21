@@ -22,22 +22,24 @@ jobs:
           wsl --install -d Ubuntu-20.04
           assertGoodExit
 
-          write-host "Launch WSL."
-          wsl
-          [console]::OutputEncoding = New-Object System.Text.UnicodeEncoding
-          $wsl = wsl -l -v | out-string
-          assertGoodExit
+          # Console encoding? 
+          Write-Host [console]::OutputEncoding 
+          #= New-Object System.Text.UnicodeEncoding
+          Write-Host $OutputEncoding 
 
+
+          Write-Host "wsl --list --all --verbose | out-string"
+          $wsl = wsl --list --all --verbose | out-string
           write-host $wsl
+
           while ($wsl -notmatch 'Ubuntu-20.04.*running') {
             start-sleep -seconds 1
-            $wsl = wsl -l -v | out-string
-            assertGoodExit
+            Write-Host "wsl --list --all --verbose | out-string"
+            $wsl = wsl --list --all --verbose | out-string
             write-host $wsl
 
             Write-Host "wsl --status"
             wsl --status
-            assertGoodExit
           }
           write-host "Ubuntu installed."
         displayName: Install WSL
