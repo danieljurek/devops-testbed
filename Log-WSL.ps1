@@ -24,6 +24,7 @@ if (Test-Path $wslconfig)
     Copy-Item $wslconfig $folder
 }
 
+Import-Module Appx
 get-appxpackage MicrosoftCorporationII.WindowsSubsystemforLinux > $folder/appxpackage.txt
 get-acl "C:\ProgramData\Microsoft\Windows\WindowsApps" -ErrorAction Ignore | Format-List > $folder/acl.txt
 

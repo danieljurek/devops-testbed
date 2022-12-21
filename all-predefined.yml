@@ -44,8 +44,14 @@ jobs:
       #     write-host "Ubuntu installed."
       #   displayName: Install WSL
 
-      - pwsh: ./Log-WSL.ps1
+      - task: PowerShell@2 
         displayName: Log WSL behavior
+        inputs:
+          filePath: Log-WSL.ps1
+          targetType: filePath
+          pwsh: true
+          errorActionPreference: continue
+          ignoreLASTEXITCODE: true
 
       - publish: WslLogs
         artifact: WslLogs
