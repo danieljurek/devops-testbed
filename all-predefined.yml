@@ -23,8 +23,8 @@ jobs:
       vmImage: $(VmImage)
 
     steps:
-      - pwsh: bash.exe pwd
-        displayName: bash.exe pwd
+      - pwsh: Run bash.exe
+        displayName: bash.exe -c "lsb_release -a"
 
       - pwsh: |
           Write-Host "wsl --status" 
