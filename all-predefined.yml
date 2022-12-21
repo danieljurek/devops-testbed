@@ -23,7 +23,7 @@ jobs:
       vmImage: $(VmImage)
 
     steps:
-      - pwsh: bash.exe -c "lsb_release -a"
+      - pwsh: bash.exe -c "pwd; ls; apt update; lsb_release -a"
         displayName: bash.exe -c "lsb_release -a"
 
       - pwsh: |
