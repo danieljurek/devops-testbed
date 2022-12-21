@@ -49,7 +49,7 @@ jobs:
         inputs:
           filePath: Log-WSL.ps1
           targetType: filePath
-          pwsh: true
+          pwsh: false
           errorActionPreference: continue
           ignoreLASTEXITCODE: true
 
