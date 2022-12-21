@@ -1,15 +1,5 @@
 jobs:
   - job: TryWsl
-
-    strategy:
-      matrix: 
-        m1: {}
-        m2: {}
-        m3: {}
-        m4: {}
-        m5: {}
-      maxParallel: 3
-
     pool: azsdk-pool-mms-win-2022-general
 
     steps:
