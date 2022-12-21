@@ -4,11 +4,11 @@ jobs:
       matrix:
         PipelinesHostedPool2022:
           Pool: Azure Pipelines
-          VmImage: win-2022
+          VmImage: windows-2022
 
         PipelinesHostedPool2019:
           Pool: Azure Pipelines
-          VmImage: win-2019
+          VmImage: windows-2019
 
         SelfHostedPool2022: 
           Pool: azsdk-pool-mms-win-2022-general
