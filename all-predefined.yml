@@ -23,8 +23,8 @@ jobs:
       vmImage: $(VmImage)
 
     steps:
-      - pwsh: wslbash.exe pwd
-        displayName: wslbash.exe pwd
+      - pwsh: bash.exe pwd
+        displayName: bash.exe pwd
 
       - pwsh: |
           Write-Host "wsl --status" 
