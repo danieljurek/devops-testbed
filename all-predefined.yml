@@ -5,7 +5,7 @@ jobs:
         PipelinesHostedPool2022:
           Pool: Azure Pipelines
           VmImage: windows-2022
-          Demands:
+          Demands: ""
 
         SelfHostedPool2022: 
           Pool: azsdk-pool-mms-win-2022-general
