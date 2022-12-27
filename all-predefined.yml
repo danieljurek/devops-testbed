@@ -9,16 +9,18 @@ jobs:
         SelfHostedPool2022: 
           Pool: azsdk-pool-mms-win-2022-general
           VmImage: __UNUSED__
+          Demands: ImageVersionOverride -equals 
 
     pool:
       name: $(Pool)
       vmImage: $(VmImage)
+      demands: $(Demands)
 
     steps:
-      # - pwsh: bash.exe -c "pwd; ls; cat /etc/lsb-release; apt update; lsb_release -a"
-      #   displayName: bash.exe -c "lsb_release -a"
-
       - pwsh: |
+          Write-Host "wsreset.exe"
+          wsreset.exe
+
           Write-Host "wsl --status" 
           wsl --status 
 
@@ -33,7 +35,13 @@ jobs:
           $wsl = wsl --list --all --verbose | out-string
           write-host $wsl
 
+          $checkCount = 0
           while ($wsl -notmatch 'Ubuntu-20.04.*running') {
+            $checkCount++
+            if ($checkCount -gt 30) { 
+              Write-Host "Failed to detect start in time"
+              exit 1
+            }
             start-sleep -seconds 1
             Write-Host "wsl --list --all --verbose | out-string"
             $wsl = wsl --list --all --verbose | out-string
