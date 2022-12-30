@@ -19,9 +19,9 @@ jobs:
 
     steps:
       - pwsh: |
-          Write-Host "wsreset.exe"
-          wsreset.exe
-
+          Write-Host "wsl --update --web-download"
+          wsl --update --web-download
+          
           Write-Host "wsl --status" 
           wsl --status 
 
