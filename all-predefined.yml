@@ -30,6 +30,8 @@ jobs:
           Write-Host "wsl --install -d Ubuntu-20.04 --web-download"
           wsl --install -d Ubuntu-20.04 --web-download
 
+          [console]::OutputEncoding = New-Object System.Text.UnicodeEncoding
+
           Write-Host "wsl --list --all --verbose | out-string"
           $wsl = wsl --list --all --verbose | out-string
           write-host $wsl
