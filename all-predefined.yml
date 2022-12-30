@@ -18,7 +18,8 @@ jobs:
     steps:
       - pwsh: |
           Write-Host "wsl --update --web-download"
-          wsl --update --web-download
+          $update = wsl --update --web-download | Out-String
+          Write-Host $update
           
           Write-Host "wsl --status" 
           wsl --status 
