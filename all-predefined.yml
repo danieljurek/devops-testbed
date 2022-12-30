@@ -18,8 +18,7 @@ jobs:
     steps:
       - pwsh: |
           Write-Host "wsl --update --web-download"
-          $update = wsl --update --web-download | Out-String
-          Write-Host $update
+          wsl --update --web-download | Out-String
           
           Write-Host "wsl --status" 
           wsl --status 
@@ -28,8 +27,8 @@ jobs:
           wsl --list --online
 
           write-host "WSL install of ubuntu."
-          Write-Host "wsl --install -d Ubuntu-20.04"
-          wsl --install -d Ubuntu-20.04
+          Write-Host "wsl --install -d Ubuntu-20.04 --web-download"
+          wsl --install -d Ubuntu-20.04 --web-download
 
           Write-Host "wsl --list --all --verbose | out-string"
           $wsl = wsl --list --all --verbose | out-string
