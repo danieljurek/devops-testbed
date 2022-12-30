@@ -5,7 +5,6 @@ jobs:
         PipelinesHostedPool2022:
           Pool: Azure Pipelines
           VmImage: windows-2022
-          Demands: ""
 
         SelfHostedPool2022: 
           Pool: azsdk-pool-mms-win-2022-general
@@ -15,7 +14,6 @@ jobs:
     pool:
       name: $(Pool)
       vmImage: $(VmImage)
-      demands: $(Demands)
 
     steps:
       - pwsh: |
