@@ -45,9 +45,6 @@ jobs:
             Write-Host "wsl --list --all --verbose | out-string"
             $wsl = wsl --list --all --verbose | out-string
             write-host $wsl
-
-            Write-Host "wsl --status"
-            wsl --status
           }
           write-host "Ubuntu installed."
         displayName: Install WSL
