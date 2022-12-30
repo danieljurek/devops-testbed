@@ -34,13 +34,7 @@ jobs:
           $wsl = wsl --list --all --verbose | out-string
           write-host $wsl
 
-          $checkCount = 0
           while ($wsl -notmatch 'Ubuntu-20.04.*running') {
-            $checkCount++
-            if ($checkCount -gt 30) { 
-              Write-Host "Failed to detect start in time"
-              exit 1
-            }
             start-sleep -seconds 1
             Write-Host "wsl --list --all --verbose | out-string"
             $wsl = wsl --list --all --verbose | out-string
