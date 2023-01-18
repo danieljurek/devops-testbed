@@ -2,46 +2,26 @@ jobs:
   - job: TryWsl
     strategy: 
       matrix:
-        PipelinesHostedPool2022:
+        macos12:
           Pool: Azure Pipelines
-          VmImage: windows-2022
+          VmImage: macOS-12
 
-        SelfHostedPool2022: 
-          Pool: azsdk-pool-mms-win-2022-general
-          VmImage: __UNUSED__
-          Demands: ImageVersionOverride -equals 
+        macos11: 
+          Pool: Azure Pipelines
+          VmImage: macOS-11
 
     pool:
       name: $(Pool)
       vmImage: $(VmImage)
 
-    steps:
-      - pwsh: |
-          Write-Host "wsl --update --web-download"
-          wsl --update --web-download | Out-String
-          
-          Write-Host "wsl --status" 
-          wsl --status 
+    steps:    
+      - pwsh: Write-Host "Will we succeed?"      
 
-          Write-Host "wsl --list --online" 
-          wsl --list --online
+      - task: DockerInstaller@0
+        displayName: Docker Installer
+        condition: and(succeeded(), contains(variables['OSVmImage'], 'macOS'))
+        inputs:
+          dockerVersion: 17.09.0-ce
+          releaseType: stable
 
-          write-host "WSL install of ubuntu."
-          Write-Host "wsl --install -d Ubuntu-20.04 --web-download"
-          wsl --install -d Ubuntu-20.04 --web-download
-
-          [console]::OutputEncoding = New-Object System.Text.UnicodeEncoding
-
-          Write-Host "wsl --list --all --verbose | out-string"
-          $wsl = wsl --list --all --verbose | out-string
-          write-host $wsl
-
-          while ($wsl -notmatch 'Ubuntu-20.04.*running') {
-            start-sleep -seconds 1
-            Write-Host "wsl --list --all --verbose | out-string"
-            $wsl = wsl --list --all --verbose | out-string
-            write-host $wsl
-          }
-          write-host "Ubuntu installed."
-        displayName: Install WSL
-
+      - pwsh: Write-Host "Did we succeed?"
