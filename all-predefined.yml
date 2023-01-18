@@ -1,5 +1,5 @@
 jobs:
-  - job: TryWsl
+  - job: TryMacOSDocker
     strategy: 
       matrix:
         macos12:
@@ -19,7 +19,7 @@ jobs:
 
       - task: DockerInstaller@0
         displayName: Docker Installer
-        condition: and(succeeded(), contains(variables['OSVmImage'], 'macOS'))
+        condition: and(succeeded(), contains(variables['VmImage'], 'macOS'))
         inputs:
           dockerVersion: 17.09.0-ce
           releaseType: stable
