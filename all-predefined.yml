@@ -17,7 +17,7 @@ jobs:
     steps:    
       - pwsh: Write-Host "Will we succeed?"      
 
-      - task: DockerInstaller@0.214.0
+      - task: DockerInstaller@0.209.0
         displayName: Docker Installer
         condition: and(succeeded(), contains(variables['VmImage'], 'macOS'))
         inputs:
