@@ -4,24 +4,13 @@ jobs:
       matrix:
         macos12:
           Pool: Azure Pipelines
-          VmImage: macOS-12
-
-        macos11: 
-          Pool: Azure Pipelines
-          VmImage: macOS-11
+          VmImage: windows-2019
 
     pool:
       name: $(Pool)
       vmImage: $(VmImage)
 
     steps:    
-      - pwsh: Write-Host "Will we succeed?"      
+      - pwsh: windres 
+        displayName: Run windres
 
-      - task: DockerInstaller@0.209.0
-        displayName: Docker Installer
-        condition: and(succeeded(), contains(variables['VmImage'], 'macOS'))
-        inputs:
-          dockerVersion: 17.09.0-ce
-          releaseType: stable
-
-      - pwsh: Write-Host "Did we succeed?"
