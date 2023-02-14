@@ -2,23 +2,18 @@ jobs:
   - job: TestStuff
     strategy: 
       matrix:
-        macos-12:
+        ubuntu-2004:
           Pool: Azure Pipelines
-          VmImage: macOS-12
-
-        macos-11:
-          Pool: Azure Pipelines
-          VmImage: macOS-11
-
-        macos-1015:
-          Pool: Azure Pipelines
-          VmImage: macOS-10.15
+          VmImage: ubuntu-20.04
 
     pool:
       name: $(Pool)
       vmImage: $(VmImage)
 
     steps:    
-      - bash: bicep --version
-      - bash: codesign -dv --verbose=4 "$(which bicep)"
-
+      - bash: git clone https://github.com/jordansissel/fpm.git
+      
+      - bash: docker build . -t fpm
+        workingDirectory: fpm
+      
+      - bash: docker run fpm --help 
