@@ -19,6 +19,6 @@ jobs:
       vmImage: $(VmImage)
 
     steps:    
-      - bash: |
-          codesign -dv --verbose=4 "$(which bicep)"
+      - bash: bicep --version
+      - bash: codesign -dv --verbose=4 "$(which bicep)"
 
