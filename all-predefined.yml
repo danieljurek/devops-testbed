@@ -2,19 +2,23 @@ jobs:
   - job: TestStuff
     strategy: 
       matrix:
-        win2019:
+        macos-12:
           Pool: Azure Pipelines
-          VmImage: windows-2019
+          VmImage: macOS-12
 
-        win2022:
+        macos-11:
           Pool: Azure Pipelines
-          VmImage: windows-2022
+          VmImage: macOS-11
+
+        macos-1015:
+          Pool: Azure Pipelines
+          VmImage: macOS-10.15
 
     pool:
       name: $(Pool)
       vmImage: $(VmImage)
 
     steps:    
-      - pwsh: windres 
-        displayName: Run windres
+      - bash: |
+          which bicep
 
