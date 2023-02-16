@@ -13,7 +13,7 @@ jobs:
     steps:    
       - bash: git clone https://github.com/jordansissel/fpm.git
       
-      - bash: docker build . -t fpm
+      - bash: make docker-release-everything
         workingDirectory: fpm
       
       - bash: docker run fpm --help 
