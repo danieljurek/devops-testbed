@@ -3,8 +3,8 @@ jobs:
     strategy: 
       matrix:
         ubuntu-2204:
-          Pool: Azure Pipelines
-          VmImage: ubuntu-22.04
+          Pool: azsdk-pool-mms-ubuntu-2204-general
+          VmImage: MMSUbuntu22.04
 
     pool:
       name: $(Pool)
