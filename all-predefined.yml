@@ -2,10 +2,10 @@ jobs:
   - job: TestStuff
     strategy: 
       matrix:
-        ubuntu-2204-1es:
+        ubuntu-2204-azpipelines:
           Pool: Azure Pipelines
           VmImage: ubuntu-22.04
-        ubuntu-2204:
+        ubuntu-2204-1es:
           Pool: azsdk-pool-mms-ubuntu-2204-general
           VmImage: MMSUbuntu22.04
 
