@@ -2,18 +2,14 @@ jobs:
   - job: TestStuff
     strategy: 
       matrix:
-        ubuntu-2004:
+        ubuntu-2204:
           Pool: Azure Pipelines
-          VmImage: ubuntu-20.04
+          VmImage: ubuntu-22.04
 
     pool:
       name: $(Pool)
       vmImage: $(VmImage)
 
     steps:    
-      - bash: git clone https://github.com/jordansissel/fpm.git
-      
-      - bash: make docker-release-everything
-        workingDirectory: fpm
-      
-      - bash: docker run fpm --help 
+      - bash: apt update && apt install gcovr lcov
+        displayName: apt install
