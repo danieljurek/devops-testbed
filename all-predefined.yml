@@ -11,5 +11,5 @@ jobs:
       vmImage: $(VmImage)
 
     steps:    
-      - bash: apt update && apt install gcovr lcov
+      - bash: sudo apt update && sudo apt install gcovr lcov
         displayName: apt install
