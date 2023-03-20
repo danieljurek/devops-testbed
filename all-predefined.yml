@@ -14,8 +14,10 @@ jobs:
       vmImage: $(VmImage)
 
     steps:
-      - bash: ls -l /etc/apt/sources.list.d/
-        displayName: show apt sources
+      - bash: |
+          ls -l /etc/apt/sources.list.d/
+          sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+        displayName: Workaround, remove Microsoft apt sources
 
       - bash: sudo apt update && sudo apt install gcovr lcov
         displayName: apt install
