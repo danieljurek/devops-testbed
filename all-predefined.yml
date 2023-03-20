@@ -23,7 +23,8 @@ jobs:
           echo "/etc/apt/sources.list.d/azure.list"
           cat /etc/apt/sources.list.d/azure.list
 
-          sudo rm /etc/apt/sources.list.d/microsoft-prod.list /etc/apt/sources.list.d/azure.list
+          echo "Only removing /etc/apt/sources.list.d/azure.list"
+          sudo rm /etc/apt/sources.list.d/azure.list
           ls -l /etc/apt/sources.list.d/
         displayName: Workaround, remove Microsoft apt sources
 
