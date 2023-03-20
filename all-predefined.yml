@@ -16,7 +16,8 @@ jobs:
     steps:
       - bash: |
           ls -l /etc/apt/sources.list.d/
-          sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+          sudo rm /etc/apt/sources.list.d/microsoft-prod.list /etc/apt/sources.list.d/azure.list
+          ls -l /etc/apt/sources.list.d/
         displayName: Workaround, remove Microsoft apt sources
 
       - bash: sudo apt update && sudo apt install gcovr lcov
