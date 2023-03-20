@@ -13,6 +13,9 @@ jobs:
       name: $(Pool)
       vmImage: $(VmImage)
 
-    steps:    
+    steps:
+      - bash: ls -l /etc/apt/sources.list.d/
+        displayName: show apt sources
+
       - bash: sudo apt update && sudo apt install gcovr lcov
         displayName: apt install
