@@ -1,32 +1,16 @@
-jobs:
-  - job: TestStuff
-    strategy: 
-      matrix:
-        ubuntu-2204-azpipelines:
-          Pool: Azure Pipelines
-          VmImage: ubuntu-22.04
-        ubuntu-2204-1es:
-          Pool: azsdk-pool-mms-ubuntu-2204-general
-          VmImage: MMSUbuntu22.04
+stages: 
+  - stage: PartialSuccess
+    jobs:
+      - job: Succeed
+        steps: 
+          - pwsh: Write-Host "Success!"
+      - job: Fail
+        steps: 
+          - pwsh: Write-Error "Failed!"; exit 1
+  - stage: DependsOn
+    dependsOn: PartialSuccess
 
-    pool:
-      name: $(Pool)
-      vmImage: $(VmImage)
-
-    steps:
-      - bash: |
-          ls -l /etc/apt/sources.list.d/
-          
-          echo "/etc/apt/sources.list.d/microsoft-prod.list"
-          cat /etc/apt/sources.list.d/microsoft-prod.list
-          echo ""
-          echo "/etc/apt/sources.list.d/azure.list"
-          cat /etc/apt/sources.list.d/azure.list
-
-          echo "Only removing /etc/apt/sources.list.d/azure.list"
-          sudo rm /etc/apt/sources.list.d/azure.list
-          ls -l /etc/apt/sources.list.d/
-        displayName: Workaround, remove Microsoft apt sources
-
-      - bash: sudo apt update && sudo apt install gcovr lcov
-        displayName: apt install
+    jobs: 
+      - job: RunMe
+        steps: 
+          - pwsh: Write-Host "RunMe!"
