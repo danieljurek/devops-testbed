@@ -9,7 +9,7 @@ stages:
           - pwsh: Write-Error "Failed!"; exit 1
   - stage: DependsOn
     dependsOn: PartialSuccess
-
+    condition: eq(dependencies.PartialSuccess.Succeeded.result, 'Succeeded')
     jobs: 
       - job: RunMe
         steps: 
