@@ -9,8 +9,9 @@ stages:
           - pwsh: Write-Error "Failed!"; exit 1
   - stage: DependsOn
     dependsOn: PartialSuccess
-    condition: eq(stageDependencies.PartialSuccess.Succeeded.result, 'Succeeded')
+    condition: always()
     jobs: 
       - job: RunMe
+        condition: eq(dependencies.PartialSuccess.Succeeded.result, 'Succeeded')
         steps: 
           - pwsh: Write-Host "RunMe!"
