@@ -1,16 +1,6 @@
-stages: 
-  - stage: PartialSuccess
-    jobs:
-      - job: Succeed
-        steps: 
-          - pwsh: Write-Host "Success!"
-      - job: Fail
-        steps: 
-          - pwsh: Write-Error "Failed!"; exit 1
-  - stage: DependsOn
-    dependsOn: PartialSuccess
-    condition: eq(stageDependencies.PartialSuccess.Succeed.result, 'Succeeded')
-    jobs: 
-      - job: RunMe
-        steps: 
-          - pwsh: Write-Host "RunMe!"
+- job: Hello
+  pool:
+    name: azsdk-pool-mms-win-2022-general
+
+  steps:
+  - pwsh: echo "Hello World"
