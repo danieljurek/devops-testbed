@@ -4,5 +4,4 @@ jobs:
       name: azsdk-pool-mms-win-2022-general
 
     steps:
-    - pwsh: choco version
-    - pwsh: choco list --help
+    - pwsh: choco list
