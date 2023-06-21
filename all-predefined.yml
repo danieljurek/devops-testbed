@@ -5,3 +5,4 @@ jobs:
 
     steps:
     - pwsh: choco list
+    - pwsh: Get-Command doxygen.exe
