@@ -5,3 +5,4 @@ jobs:
 
     steps:
     - pwsh: echo "Hello World"
+    - pwsh: choco list --local-only
