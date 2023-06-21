@@ -4,5 +4,5 @@ jobs:
       name: azsdk-pool-mms-win-2022-general
 
     steps:
-    - pwsh: echo "Hello World"
-    - pwsh: choco list --local-only
+    - pwsh: choco version
+    - pwsh: choco list --help
