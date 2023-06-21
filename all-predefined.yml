@@ -1,6 +1,7 @@
-- job: Hello
-  pool:
-    name: azsdk-pool-mms-win-2022-general
+jobs: 
+  - job: Hello
+    pool:
+      name: azsdk-pool-mms-win-2022-general
 
-  steps:
-  - pwsh: echo "Hello World"
+    steps:
+    - pwsh: echo "Hello World"
