@@ -19,11 +19,6 @@ jobs:
     steps: 
       - checkout: self
 
-      - task: DownloadPipelineArtifact@2
-        inputs:
-          artifact: linux-packages-$(Architecture)
-          path: cli/installer/fpm
-
       - bash: |
           # Install PowerShell
           # https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux?view=powershell-7.3#binary-archives
