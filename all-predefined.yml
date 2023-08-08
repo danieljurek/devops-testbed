@@ -47,6 +47,20 @@ jobs:
           # sudo apt-get update
           # sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
           # sudo usermod -a -G docker $USER
+
+          apt-get remove -y moby-engine moby-cli
+          apt-get update
+          apt-get install -y moby-engine moby-cli
+          apt-get install --no-install-recommends -y moby-buildx
+          apt-get install -y moby-compose
+
+          # Enable docker.service
+          systemctl is-active --quiet docker.service || systemctl start docker.service
+          systemctl is-enabled --quiet docker.service || systemctl enable docker.service
+
+          # Docker daemon takes time to come up after installing
+          sleep 10
+          docker info
         condition: eq('arm64', variables['Architecture'])
         displayName: Install pwsh on arm64 agent
 
