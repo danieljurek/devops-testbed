@@ -50,11 +50,18 @@ jobs:
         condition: eq('arm64', variables['Architecture'])
         displayName: Install pwsh on arm64 agent
 
+      - bash: docker version
+        continueOnError: true
+
       - task: DockerInstaller@0
+        condition: eq('arm64', variables['Architecture'])
         inputs:
           dockerVersion: '17.09.0-ce' # string. Required. Docker Version. Default: 17.09.0-ce.
 
+
+
       - bash: sudo service docker restart
+        condition: eq('arm64', variables['Architecture'])
         displayName: Restart docker service
 
       - task: PowerShell@2
