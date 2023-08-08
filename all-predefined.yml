@@ -48,15 +48,15 @@ jobs:
           # sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
           # sudo usermod -a -G docker $USER
 
-          apt-get remove -y moby-engine moby-cli
-          apt-get update
-          apt-get install -y moby-engine moby-cli
-          apt-get install --no-install-recommends -y moby-buildx
-          apt-get install -y moby-compose
+          sudo apt-get remove -y moby-engine moby-cli
+          sudo apt-get update
+          sudo apt-get install -y moby-engine moby-cli
+          sudo apt-get install --no-install-recommends -y moby-buildx
+          sudo apt-get install -y moby-compose
 
           # Enable docker.service
-          systemctl is-active --quiet docker.service || systemctl start docker.service
-          systemctl is-enabled --quiet docker.service || systemctl enable docker.service
+          sudo systemctl is-active --quiet docker.service || sudo systemctl start docker.service
+          sudo systemctl is-enabled --quiet docker.service || sudo systemctl enable docker.service
 
           # Docker daemon takes time to come up after installing
           sleep 10
