@@ -24,6 +24,7 @@ jobs:
           # https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux?view=powershell-7.3#binary-archives
           sudo apt update
           sudo apt install -y curl
+          temp_dir=$(mktemp -d /tmp/tool-preinstall-XXXXXXXX)
           curl -L -o "$temp_dir/powershell.tar.gz" https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/powershell-7.3.6-linux-arm64.tar.gz
           sudo mkdir -p /opt/microsoft/powershell/7
           sudo tar zxf "$temp_dir/powershell.tar.gz" -C /opt/microsoft/powershell/7
