@@ -50,7 +50,10 @@ jobs:
         displayName: Install pwsh on arm64 agent
 
       - task: PowerShell@2
-        displayName: Verify Linux Packages
+        displayName: Say hi from PowerShell 
         inputs: 
           pwsh: true
           filePath: Write-HelloWorld.ps1
+
+      - bash: docker run -t ubuntu echo "hello world" 
+        displayName: Say hi from docker
