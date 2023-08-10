@@ -7,10 +7,10 @@ jobs:
           Pool: azsdk-pool-mms-ubuntu-2004-general
           OSVmImage:  MMSUbuntu20.04
           Architecture: amd64
-        LinuxARM64:
-          Pool: azsdk-pool-mms-ubuntu-2004-arm
-          OSVmImage: MMSUbuntu20.04ARM64
-          Architecture: arm64
+        # LinuxARM64:
+        #   Pool: azsdk-pool-mms-ubuntu-2004-arm
+        #   OSVmImage: MMSUbuntu20.04ARM64
+        #   Architecture: arm64
         
     pool:
       name: $(Pool)
@@ -18,6 +18,9 @@ jobs:
 
     steps: 
       - checkout: self
+
+      - pwsh: $PSVersionTable
+        displayName: PowerShell Version
 
       - bash: |
           # Install PowerShell
