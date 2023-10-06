@@ -19,6 +19,12 @@ jobs:
     steps: 
       - checkout: self
 
+      - bash: |
+          echo "Build.RequestedFor: $(Build.RequestedFor)"
+          echo "Build.RequestedForEmail: $(Build.RequestedForEmail)"
+          echo "Build.RequestedForId: $(Build.RequestedForId)"
+        displayName: RequestedFor info
+
       - pwsh: $PSVersionTable
         displayName: PowerShell Version
 
