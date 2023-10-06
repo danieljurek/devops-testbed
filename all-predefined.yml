@@ -23,6 +23,7 @@ jobs:
           echo "Build.RequestedFor: $(Build.RequestedFor)"
           echo "Build.RequestedForEmail: $(Build.RequestedForEmail)"
           echo "Build.RequestedForId: $(Build.RequestedForId)"
+          echo "Email as environment variable: $BUILD_REQUESTEDFOREMAIL"
         displayName: RequestedFor info
 
       - pwsh: $PSVersionTable
