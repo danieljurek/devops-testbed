@@ -3,6 +3,8 @@ trigger:
     include:
       - main
 
+# Some trivial change
+
 jobs: 
   - job: Verify_LinuxPackages
 
