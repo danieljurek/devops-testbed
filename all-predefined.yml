@@ -31,73 +31,73 @@ jobs:
           echo "Email as environment variable: $BUILD_REQUESTEDFOREMAIL"
         displayName: RequestedFor info
 
-      - pwsh: $PSVersionTable
-        displayName: PowerShell Version
+      # - pwsh: $PSVersionTable
+      #   displayName: PowerShell Version
 
-      - bash: |
-          # Install PowerShell
-          # https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux?view=powershell-7.3#binary-archives
-          sudo apt update
-          sudo apt install -y curl
-          temp_dir=$(mktemp -d /tmp/tool-preinstall-XXXXXXXX)
-          curl -L -o "$temp_dir/powershell.tar.gz" https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/powershell-7.3.6-linux-arm64.tar.gz
-          sudo mkdir -p /opt/microsoft/powershell/7
-          sudo tar zxf "$temp_dir/powershell.tar.gz" -C /opt/microsoft/powershell/7
-          sudo chmod +x /opt/microsoft/powershell/7/pwsh
-          sudo ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
+      # - bash: |
+      #     # Install PowerShell
+      #     # https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux?view=powershell-7.3#binary-archives
+      #     sudo apt update
+      #     sudo apt install -y curl
+      #     temp_dir=$(mktemp -d /tmp/tool-preinstall-XXXXXXXX)
+      #     curl -L -o "$temp_dir/powershell.tar.gz" https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/powershell-7.3.6-linux-arm64.tar.gz
+      #     sudo mkdir -p /opt/microsoft/powershell/7
+      #     sudo tar zxf "$temp_dir/powershell.tar.gz" -C /opt/microsoft/powershell/7
+      #     sudo chmod +x /opt/microsoft/powershell/7/pwsh
+      #     sudo ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
 
-          echo "PowerShell install complete:"
-          pwsh --version
+      #     echo "PowerShell install complete:"
+      #     pwsh --version
 
-          # # Install docker
-          # sudo apt-get update
-          # sudo apt-get install ca-certificates curl gnupg
-          # sudo install -m 0755 -d /etc/apt/keyrings
-          # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-          # sudo chmod a+r /etc/apt/keyrings/docker.gpg
-          # echo \
-          #   "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-          #   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-          #   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          # sudo apt-get update
-          # sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-          # sudo usermod -a -G docker $USER
+      #     # # Install docker
+      #     # sudo apt-get update
+      #     # sudo apt-get install ca-certificates curl gnupg
+      #     # sudo install -m 0755 -d /etc/apt/keyrings
+      #     # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      #     # sudo chmod a+r /etc/apt/keyrings/docker.gpg
+      #     # echo \
+      #     #   "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      #     #   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+      #     #   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      #     # sudo apt-get update
+      #     # sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+      #     # sudo usermod -a -G docker $USER
 
-          sudo apt-get remove -y moby-engine moby-cli
-          sudo apt-get update
-          sudo apt-get install -y moby-engine moby-cli
-          sudo apt-get install --no-install-recommends -y moby-buildx
-          sudo apt-get install -y moby-compose
+      #     sudo apt-get remove -y moby-engine moby-cli
+      #     sudo apt-get update
+      #     sudo apt-get install -y moby-engine moby-cli
+      #     sudo apt-get install --no-install-recommends -y moby-buildx
+      #     sudo apt-get install -y moby-compose
 
-          # Enable docker.service
-          sudo systemctl is-active --quiet docker.service || sudo systemctl start docker.service
-          sudo systemctl is-enabled --quiet docker.service || sudo systemctl enable docker.service
+      #     # Enable docker.service
+      #     sudo systemctl is-active --quiet docker.service || sudo systemctl start docker.service
+      #     sudo systemctl is-enabled --quiet docker.service || sudo systemctl enable docker.service
 
-          # Docker daemon takes time to come up after installing
-          sleep 10
-          docker info
-        condition: eq('arm64', variables['Architecture'])
-        displayName: Install pwsh on arm64 agent
+      #     # Docker daemon takes time to come up after installing
+      #     sleep 10
+      #     docker info
+      #   condition: eq('arm64', variables['Architecture'])
+      #   displayName: Install pwsh on arm64 agent
 
-      - bash: docker version
-        continueOnError: true
+      # - bash: docker version
+      #   continueOnError: true
 
-      - task: DockerInstaller@0
-        condition: eq('arm64', variables['Architecture'])
-        inputs:
-          dockerVersion: '17.09.0-ce' # string. Required. Docker Version. Default: 17.09.0-ce.
+      # - task: DockerInstaller@0
+      #   condition: eq('arm64', variables['Architecture'])
+      #   inputs:
+      #     dockerVersion: '17.09.0-ce' # string. Required. Docker Version. Default: 17.09.0-ce.
 
 
 
-      - bash: sudo service docker restart
-        condition: eq('arm64', variables['Architecture'])
-        displayName: Restart docker service
+      # - bash: sudo service docker restart
+      #   condition: eq('arm64', variables['Architecture'])
+      #   displayName: Restart docker service
 
-      - task: PowerShell@2
-        displayName: Say hi from PowerShell 
-        inputs: 
-          pwsh: true
-          filePath: Write-HelloWorld.ps1
+      # - task: PowerShell@2
+      #   displayName: Say hi from PowerShell 
+      #   inputs: 
+      #     pwsh: true
+      #     filePath: Write-HelloWorld.ps1
 
-      - bash: docker run -t ubuntu echo "hello world" 
-        displayName: Say hi from docker
+      # - bash: docker run -t ubuntu echo "hello world" 
+      #   displayName: Say hi from docker
