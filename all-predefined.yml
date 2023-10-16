@@ -25,6 +25,10 @@ jobs:
       - checkout: self
 
       - bash: |
+          echo "Build.Repository.Name: $(Build.Repository.Name)"
+        displayName: Build.Repository.Name
+
+      - bash: |
           echo "Build.RequestedFor: $(Build.RequestedFor)"
           echo "Build.RequestedForEmail: $(Build.RequestedForEmail)"
           echo "Build.RequestedForId: $(Build.RequestedForId)"
