@@ -55,8 +55,8 @@ stages:
                 #       -DevOpsOutput
 
                 - pwsh: |
-                    Write-Host "##vso[task.setvariable variable=CLI_VERSION;]1.4.2"
-                    Write-Host "##vso[task.setvariable variable=MSI_VERSION;]1.4.300"
+                    Write-Host "##vso[task.setvariable variable=CLI_VERSION;]1.4.3"
+                    Write-Host "##vso[task.setvariable variable=MSI_VERSION;]1.4.400"
                   displayName: Set CLI_VERSION and MSI_VERSION
 
                 - task: PowerShell@2
