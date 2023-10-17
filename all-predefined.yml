@@ -27,7 +27,7 @@ stages:
             succeeded(),
             ne('true', variables['Skip.Publish'])
           )
-        environment: azure-dev
+        # environment: azure-dev
 
         pool:
           name: azsdk-pool-mms-win-2022-general
