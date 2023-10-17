@@ -1,107 +1,218 @@
-trigger: 
-  branches:
-    include:
-      - main
+# trigger: 
+#   branches:
+#     include:
+#       - main
 
-jobs: 
-  - job: Verify_LinuxPackages
 
-    strategy:
-      matrix:
-        LinuxAMD64: 
-          Pool: azsdk-pool-mms-ubuntu-2204-general
-          OSVmImage:  MMSUbuntu22.04
-          Architecture: amd64
-        # LinuxARM64:
-        #   Pool: azsdk-pool-mms-ubuntu-2004-arm
-        #   OSVmImage: MMSUbuntu20.04ARM64
-        #   Architecture: arm64
+stages:
+  - stage: PublishVersionTxt
+
+    condition: >-
+      and(
+        succeeded(),
+        ne(variables['Skip.Release'], 'true'),
+        or(
+          eq('Manual', variables['BuildReasonOverride']),
+          and(
+            eq('', variables['BuildReasonOverride']),
+            eq('Manual', variables['Build.Reason'])
+          )
+        )
+      )
+
+    jobs:
+      - deployment: Upload_Version_Txt
+        condition: >-
+          and(
+            succeeded(),
+            ne('true', variables['Skip.Publish'])
+          )
+        environment: azure-dev
+
+        pool:
+          name: azsdk-pool-mms-win-2022-general
+
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                # - task: PowerShell@2
+                #   inputs:
+                #     pwsh: true
+                #     targetType: filePath
+                #     filePath: eng/scripts/Set-CliVersionVariable.ps1
+                #   displayName: Set CLI_VERSION
+
+                # - task: PowerShell@2
+                #   displayName: Set MSI_VERSION
+                #   inputs:
+                #     pwsh: true
+                #     targetType: filePath
+                #     filePath: eng/scripts/Get-MsiVersion.ps1
+                #     arguments: >-
+                #       -CliVersion '$(CLI_VERSION)'
+                #       -DevOpsOutput
+
+                - pwsh: |
+                    Write-Host "##vso[task.setvariable variable=CLI_VERSION;]1.4.2"
+                    Write-Host "##vso[task.setvariable variable=MSI_VERSION;]1.4.300"
+                  displayName: Set CLI_VERSION and MSI_VERSION
+
+                - task: PowerShell@2
+                  displayName: Wait for WinGet package
+                  inputs:
+                    pwsh: true
+                    targetType: filePath
+                    filePath: eng/scripts/Wait-WinGetPackage.ps1
+                    arguments: >-
+                      -PackageName 'Microsoft.Azd'
+                      -PackageVersion '$(MSI_VERSION)'
+                      -TimeoutInSeconds 2
+
+                - task: PowerShell@2
+                  displayName: Wait for Choco package
+                  inputs:
+                    pwsh: true
+                    targetType: filePath
+                    filePath: eng/scripts/Wait-ChocoPackage.ps1
+                    arguments: >-
+                      -PackageName 'azd'
+                      -PackageVersion '$(MSI_VERSION)'
+                      -TimeoutInSeconds 2
+
+                - pwsh: |
+                    New-Item -ItemType Directory -Path release
+                    Write-Output $(CLI_VERSION) | Out-File -Encoding utf8 -FilePath ./release/version.txt
+                  displayName: Write version.txt file for release
+
+                - pwsh: |
+                    $isPublishingGa = eng/scripts/Test-ShouldReleasePackageVersion.ps1 `
+                      -CliVersion '$(CLI_VERSION)'
+
+                    $publishUploadLocations = @('release/latest')
+                    if ($isPublishingGa) {
+                      $publishUploadLocations += @('release/stable')
+                    }
+
+                    Get-ChildItem release/
+
+                    foreach ($folder in $publishUploadLocations) {
+                      Write-Host "Upload to azd/standalone/$folder"
+                      az storage blob upload-batch `
+                        --account-name '$(azdev-storage-account-name)' `
+                        --account-key '$(azdev-storage-account-key)' `
+                        --auth-mode key `
+                        -s release/ `
+                        -d "azd/standalone/$folder/version.txt" `
+                        --overwrite
+
+                      if ($LASTEXITCODE) {
+                        Write-Error "Upload failed"
+                        exit 1
+                      }
+                    }
+                  displayName: Upload version.txt to storage account
+
+
+  # - job: Verify_LinuxPackages
+
+  #   strategy:
+  #     matrix:
+  #       LinuxAMD64: 
+  #         Pool: azsdk-pool-mms-ubuntu-2204-general
+  #         OSVmImage:  MMSUbuntu22.04
+  #         Architecture: amd64
+  #       # LinuxARM64:
+  #       #   Pool: azsdk-pool-mms-ubuntu-2004-arm
+  #       #   OSVmImage: MMSUbuntu20.04ARM64
+  #       #   Architecture: arm64
         
-    pool:
-      name: $(Pool)
-      vmImage: $(OSVmImage)
+  #   pool:
+  #     name: $(Pool)
+  #     vmImage: $(OSVmImage)
 
-    steps: 
-      - checkout: self
+  #   steps: 
+  #     - checkout: self
 
-      - bash: |
-          echo "Build.Repository.Name: $(Build.Repository.Name)"
-        displayName: Build.Repository.Name
+  #     - bash: |
+  #         echo "Build.Repository.Name: $(Build.Repository.Name)"
+  #       displayName: Build.Repository.Name
 
-      - bash: |
-          echo "Build.RequestedFor: $(Build.RequestedFor)"
-          echo "Build.RequestedForEmail: $(Build.RequestedForEmail)"
-          echo "Build.RequestedForId: $(Build.RequestedForId)"
-          echo "Email as environment variable: $BUILD_REQUESTEDFOREMAIL"
-        displayName: RequestedFor info
+  #     - bash: |
+  #         echo "Build.RequestedFor: $(Build.RequestedFor)"
+  #         echo "Build.RequestedForEmail: $(Build.RequestedForEmail)"
+  #         echo "Build.RequestedForId: $(Build.RequestedForId)"
+  #         echo "Email as environment variable: $BUILD_REQUESTEDFOREMAIL"
+  #       displayName: RequestedFor info
 
-      # - pwsh: $PSVersionTable
-      #   displayName: PowerShell Version
+  #     # - pwsh: $PSVersionTable
+  #     #   displayName: PowerShell Version
 
-      # - bash: |
-      #     # Install PowerShell
-      #     # https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux?view=powershell-7.3#binary-archives
-      #     sudo apt update
-      #     sudo apt install -y curl
-      #     temp_dir=$(mktemp -d /tmp/tool-preinstall-XXXXXXXX)
-      #     curl -L -o "$temp_dir/powershell.tar.gz" https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/powershell-7.3.6-linux-arm64.tar.gz
-      #     sudo mkdir -p /opt/microsoft/powershell/7
-      #     sudo tar zxf "$temp_dir/powershell.tar.gz" -C /opt/microsoft/powershell/7
-      #     sudo chmod +x /opt/microsoft/powershell/7/pwsh
-      #     sudo ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
+  #     # - bash: |
+  #     #     # Install PowerShell
+  #     #     # https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux?view=powershell-7.3#binary-archives
+  #     #     sudo apt update
+  #     #     sudo apt install -y curl
+  #     #     temp_dir=$(mktemp -d /tmp/tool-preinstall-XXXXXXXX)
+  #     #     curl -L -o "$temp_dir/powershell.tar.gz" https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/powershell-7.3.6-linux-arm64.tar.gz
+  #     #     sudo mkdir -p /opt/microsoft/powershell/7
+  #     #     sudo tar zxf "$temp_dir/powershell.tar.gz" -C /opt/microsoft/powershell/7
+  #     #     sudo chmod +x /opt/microsoft/powershell/7/pwsh
+  #     #     sudo ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
 
-      #     echo "PowerShell install complete:"
-      #     pwsh --version
+  #     #     echo "PowerShell install complete:"
+  #     #     pwsh --version
 
-      #     # # Install docker
-      #     # sudo apt-get update
-      #     # sudo apt-get install ca-certificates curl gnupg
-      #     # sudo install -m 0755 -d /etc/apt/keyrings
-      #     # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-      #     # sudo chmod a+r /etc/apt/keyrings/docker.gpg
-      #     # echo \
-      #     #   "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      #     #   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-      #     #   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      #     # sudo apt-get update
-      #     # sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-      #     # sudo usermod -a -G docker $USER
+  #     #     # # Install docker
+  #     #     # sudo apt-get update
+  #     #     # sudo apt-get install ca-certificates curl gnupg
+  #     #     # sudo install -m 0755 -d /etc/apt/keyrings
+  #     #     # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  #     #     # sudo chmod a+r /etc/apt/keyrings/docker.gpg
+  #     #     # echo \
+  #     #     #   "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  #     #     #   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  #     #     #   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  #     #     # sudo apt-get update
+  #     #     # sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  #     #     # sudo usermod -a -G docker $USER
 
-      #     sudo apt-get remove -y moby-engine moby-cli
-      #     sudo apt-get update
-      #     sudo apt-get install -y moby-engine moby-cli
-      #     sudo apt-get install --no-install-recommends -y moby-buildx
-      #     sudo apt-get install -y moby-compose
+  #     #     sudo apt-get remove -y moby-engine moby-cli
+  #     #     sudo apt-get update
+  #     #     sudo apt-get install -y moby-engine moby-cli
+  #     #     sudo apt-get install --no-install-recommends -y moby-buildx
+  #     #     sudo apt-get install -y moby-compose
 
-      #     # Enable docker.service
-      #     sudo systemctl is-active --quiet docker.service || sudo systemctl start docker.service
-      #     sudo systemctl is-enabled --quiet docker.service || sudo systemctl enable docker.service
+  #     #     # Enable docker.service
+  #     #     sudo systemctl is-active --quiet docker.service || sudo systemctl start docker.service
+  #     #     sudo systemctl is-enabled --quiet docker.service || sudo systemctl enable docker.service
 
-      #     # Docker daemon takes time to come up after installing
-      #     sleep 10
-      #     docker info
-      #   condition: eq('arm64', variables['Architecture'])
-      #   displayName: Install pwsh on arm64 agent
+  #     #     # Docker daemon takes time to come up after installing
+  #     #     sleep 10
+  #     #     docker info
+  #     #   condition: eq('arm64', variables['Architecture'])
+  #     #   displayName: Install pwsh on arm64 agent
 
-      # - bash: docker version
-      #   continueOnError: true
+  #     # - bash: docker version
+  #     #   continueOnError: true
 
-      # - task: DockerInstaller@0
-      #   condition: eq('arm64', variables['Architecture'])
-      #   inputs:
-      #     dockerVersion: '17.09.0-ce' # string. Required. Docker Version. Default: 17.09.0-ce.
+  #     # - task: DockerInstaller@0
+  #     #   condition: eq('arm64', variables['Architecture'])
+  #     #   inputs:
+  #     #     dockerVersion: '17.09.0-ce' # string. Required. Docker Version. Default: 17.09.0-ce.
 
 
 
-      # - bash: sudo service docker restart
-      #   condition: eq('arm64', variables['Architecture'])
-      #   displayName: Restart docker service
+  #     # - bash: sudo service docker restart
+  #     #   condition: eq('arm64', variables['Architecture'])
+  #     #   displayName: Restart docker service
 
-      # - task: PowerShell@2
-      #   displayName: Say hi from PowerShell 
-      #   inputs: 
-      #     pwsh: true
-      #     filePath: Write-HelloWorld.ps1
+  #     # - task: PowerShell@2
+  #     #   displayName: Say hi from PowerShell 
+  #     #   inputs: 
+  #     #     pwsh: true
+  #     #     filePath: Write-HelloWorld.ps1
 
-      # - bash: docker run -t ubuntu echo "hello world" 
-      #   displayName: Say hi from docker
+  #     # - bash: docker run -t ubuntu echo "hello world" 
+  #     #   displayName: Say hi from docker
