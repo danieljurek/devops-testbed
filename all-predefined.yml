@@ -36,3 +36,6 @@ stages:
               name: thing-terraform-thing
         steps: 
           - pwsh: Write-Host "hello world! $(name)"
+          - pwsh: Write-Host "No terraform here..."
+            condition: not(contains(variables['name'], 'terraform'))
+
