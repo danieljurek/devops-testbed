@@ -4,38 +4,10 @@
 #       - main
 
 
-stages:
-  - stage: DynamicMatrix
-    jobs: 
-      - job: CreateDynamicMatrix
-        steps: 
-          - pwsh: |
-              Write-Host '##vso[task.setvariable variable=Matrix;isOutput=true]{"RunMe": { "name": "runme" }, "SkipMe": { "name": "thing-terraform-thing" }}'
+jobs: 
+  - job: Test-setupAzd
+    steps: 
+      - task: setup-azd@0.17.0
+        displayName: Install azd
 
-
-      - job: ConsumeDynamicMatrix
-        dependsOn: CreateDynamicMatrix
-        condition: not(contains(variables['name'], 'terraform'))
-
-        strategy:
-          matrix: $[ dependencies.CreateDynamicMatrix.outputs['Matrix'] ]
-        
-        steps: 
-          - pwsh: Write-Host "hello world! $(name)"
-
-  - stage: StaticMatrix
-    jobs: 
-      - job: ConsumeStaticMatrix
-        condition: not(contains(variables['name'], 'terraform'))
-
-        strategy: 
-          matrix: 
-            RunMe: 
-              name: runme
-            SkipMe:
-              name: thing-terraform-thing
-        steps: 
-          - pwsh: Write-Host "hello world! $(name)"
-          - pwsh: Write-Host "No terraform here..."
-            condition: not(contains(variables['name'], 'terraform'))
-
+      - pwsh: azd version
