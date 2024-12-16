@@ -7,7 +7,7 @@
 jobs: 
   - job: Test-setupAzd
     steps: 
-      - task: setup-azd@0.17.0
-        displayName: Install azd
+      - pwsh: Invoke-RestMethod 'https://aka.ms/install-azd.ps1' | Invoke-Expression
+        displayName: Install azd (mitigation)
 
       - pwsh: azd version
