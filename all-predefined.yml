@@ -30,7 +30,4 @@ jobs:
           }
         displayName: Install azd (mitigation)
 
-      - pwsh: |
-          Get-ChildItem "$($env:LocalAppData)\Azure Dev CLI" -
-
       - pwsh: azd version
