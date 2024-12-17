@@ -26,8 +26,11 @@ jobs:
 
           if ($IsWindows) {
             # Append install location to PATH on Windows
-            Write-Host "##vso[task.prependpath]$($env:LocalAppData)\Azure Dev CLI"
+            Write-Host "##vso[task.prependpath]$($env:LocalAppData)\programs\Azure Dev CLI"
           }
         displayName: Install azd (mitigation)
+
+      - pwsh: |
+          Get-ChildItem "$($env:LocalAppData)\Azure Dev CLI" -
 
       - pwsh: azd version
