@@ -19,7 +19,10 @@ jobs:
       vmImage: $(vmImage)
 
     steps: 
-      - pwsh: Invoke-RestMethod 'https://aka.ms/install-azd.ps1' | Invoke-Expression
+      - pwsh: |
+          Invoke-RestMethod 'https://aka.ms/install-azd.ps1' -OutFile install-azd.ps1
+          ./install-azd.ps1 -BaseUrl 'https://azdrelease.azureedge.net/azd/standalone'
+          Remove-Item ./install-azd.ps1
         displayName: Install azd (mitigation)
 
       - pwsh: azd version
