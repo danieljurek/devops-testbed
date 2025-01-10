@@ -21,5 +21,5 @@ jobs:
     steps: 
       - pwsh: |
           $result = Invoke-WebRequest -Uri https://azd-release-gfgac2cmf7b8cuay.b02.azurefd.net/azd/standalone/release/stable/azd-windows-amd64.msi
-          Write-Host "x-ms-request-id: $($result.Headers['x-ms-request-id'])"
+          Write-Host "x-azure-ref: $($result.Headers['x-azure-ref'])"
         displayName: Install azd (mitigation)
