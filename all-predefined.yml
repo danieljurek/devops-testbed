@@ -8,8 +8,8 @@ jobs:
   - job: setupazd
     strategy: 
       matrix:
-        Windows:
-          vmImage: windows-latest
+        # Windows:
+        #   vmImage: windows-latest
         Linux:
           vmImage: ubuntu-latest
         Mac:
@@ -19,6 +19,5 @@ jobs:
       vmImage: $(vmImage)
 
     steps: 
-      - task: setup-azd@0
-        inputs:
-          version: daily
+      - script: curl -fsSL https://aka.ms/install-azd.sh | bash -s -- --version daily
+        displayName: Install azd
