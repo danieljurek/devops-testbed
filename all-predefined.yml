@@ -19,26 +19,6 @@ jobs:
       vmImage: $(vmImage)
 
     steps: 
-      - pwsh: |
-          try { 
-              $result = Invoke-WebRequest -Uri https://azd-release-gfgac2cmf7b8cuay.b02.azurefd.net/azd/standalone/release/latest/azd-linux-amd64.tar.gz
-              $result.Headers | Format-Table -AutoSize -Wrap
-          } catch { 
-              Write-Host "Failure: Invoke-WebRequest threw an error"
-              $_ | Write-Host
-              $_.Exception.Response.Headers | Format-Table -AutoSize -Wrap
-              exit 1
-          }
-        displayName: Try downloading azd
-
-      - pwsh: |
-          try { 
-              $result = Invoke-WebRequest -Uri https://azd-release-gfgac2cmf7b8cuay.b02.azurefd.net/azd/standalone/release/latest/azd-linux-amd64.tar.gzzzzz404
-              $result.Headers | Format-Table -AutoSize -Wrap
-          } catch { 
-              Write-Host "Failure: Invoke-WebRequest threw an error"
-              $_ | Write-Host
-              $_.Exception.Response.Headers | Format-Table -AutoSize -Wrap
-              exit 1
-          }
-        displayName: Try downloading azd (fail)
+      - task: setup-azd@0
+        inputs:
+          version: daily
