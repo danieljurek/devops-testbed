@@ -19,5 +19,5 @@ jobs:
       vmImage: $(vmImage)
 
     steps: 
-      - script: curl -fsSL https://aka.ms/install-azd.sh | bash -s -- --version daily
-        displayName: Install azd
+      - pwsh: Write-Host "$(Build.Repository.Name)"
+        displayName: Variables
