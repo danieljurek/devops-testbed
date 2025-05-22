@@ -10,8 +10,8 @@ jobs:
       PoolName: azsdk-pool
       ImageName: ubuntu-24.04
     pool:
-      name: $(PoolName)z
-      demands: ImageOverride -equals $(ImageName)z
+      name: $(PoolName)
+      demands: ImageOverride -equals $(ImageName)
 
     steps: 
       - pwsh: Write-Host "Hello World"
