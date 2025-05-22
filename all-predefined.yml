@@ -10,7 +10,7 @@ jobs:
       PoolName: azsdk-pool
       ImageName: ubuntu-24.04
     pool:
-      name: $(PoolName)
+      name: $(PoolName)z
       demands: ImageOverride -equals $(ImageName)z
 
     steps: 
