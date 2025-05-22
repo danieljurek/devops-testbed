@@ -6,18 +6,13 @@
 
 jobs: 
   - job: setupazd
-    strategy: 
-      matrix:
-        Windows:
-          vmImage: windows-latest
-        Linux:
-          vmImage: ubuntu-latest
-        Mac:
-          vmImage: macos-latest
-
+    variables:
+      - PoolName: azsdk-pool
+      - ImageName: ubuntu-24.04
     pool:
-      vmImage: $(vmImage)
+      name: $(PoolName)
+      demands: ImageOverride -equals $(ImageName)z
 
     steps: 
-      - pwsh: Write-Host "$(Build.Repository.Name)"
-        displayName: Variables
+      - pwsh: Write-Host "Hello World"
+        displayName: Hello World
