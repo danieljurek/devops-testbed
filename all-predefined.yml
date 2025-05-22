@@ -8,10 +8,10 @@ jobs:
   - job: setupazd
     variables:
       PoolName: azsdk-pool
-      ImageName: ubuntu-24.04
+      Demand: ImageOverride -equals ubuntu-24.04
     pool:
       name: $(PoolName)
-      demands: ImageOverride -equals $(ImageName)
+      demands: $(Demand)
 
     steps: 
       - pwsh: Write-Host "Hello World"
