@@ -7,8 +7,8 @@
 jobs: 
   - job: setupazd
     variables:
-      - PoolName: azsdk-pool
-      - ImageName: ubuntu-24.04
+      PoolName: azsdk-pool
+      ImageName: ubuntu-24.04
     pool:
       name: $(PoolName)
       demands: ImageOverride -equals $(ImageName)z
