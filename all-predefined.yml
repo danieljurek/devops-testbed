@@ -17,3 +17,8 @@ jobs:
     steps: 
       - pwsh: Write-Host "Hello World"
         displayName: Hello World
+
+      - pwsh: |
+          "# Hello Summary" > Set-Content summary.md
+          Write-Host "##vso[task.uploadsummary]$(System.DefaultWorkingDirectory)/summary.md"
+        displayName: Write summary.md
