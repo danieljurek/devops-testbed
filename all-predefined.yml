@@ -3,6 +3,10 @@
 #     include:
 #       - main
 
+pr:
+  branches:
+    include:
+      - main
 
 jobs: 
   - job: setupazd
