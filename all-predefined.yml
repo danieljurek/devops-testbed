@@ -22,5 +22,10 @@ jobs:
       - pwsh: Write-Host "Hello World"
         displayName: Hello World
 
-      - pwsh: nuget
+      - pwsh: |
+          Write-Host "Download nuget..."
+          Invoke-WebRequest -Uri https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -o nuget.exe
+          
+          Write-Host "Run nuget..."
+          dotnet run ./nuget.exe
         displayName: nuget
