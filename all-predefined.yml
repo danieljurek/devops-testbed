@@ -22,7 +22,5 @@ jobs:
       - pwsh: Write-Host "Hello World"
         displayName: Hello World
 
-      - pwsh: |
-          "# Hello Summary" | Set-Content summary.md
-          Write-Host "##vso[task.addattachment type=Distributedtask.Core.Summary;name=DoesThisNameDoAnything]$(System.DefaultWorkingDirectory)/summary.md"
-        displayName: Write summary.md
+      - pwsh: nuget
+        displayName: nuget
