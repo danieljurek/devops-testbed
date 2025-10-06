@@ -7,4 +7,18 @@ steps:
       '${{ convertToJson(parameters.Artifacts) }}' | ConvertFrom-Json | ConvertTo-Json -Depth 100 | Write-Host
     displayName: Artifacts as JSON
 
-  
+  - pwsh: |
+      // An empty string is converted to 0 (i.e. [int]'' = 0)
+      $index = [int]'$(ArtifactIndex)'
+      Write-Host "##vso[task.setvariable variable=ArtifactIndex]$index"
+    displayName: Set ArtifactIndex to 0
+
+  - ${{ each item in Artifacts }}: 
+      - pwsh: |
+          Write-Host "Doing operation on item: $(ArtifactIndex)"
+        displayName: Operate on Artifact
+      
+      - pwsh: |
+          $index = [int]'$(ArtifactIndex)' + 1
+          Write-Host "##vso[task.setvariable variable=ArtifactIndex]$index"
+        displayName: Increment ArtifactIndex
