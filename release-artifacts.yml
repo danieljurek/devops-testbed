@@ -8,7 +8,7 @@ steps:
     displayName: Artifacts as JSON
 
   - pwsh: |
-      Write-Host "##vso[task.setvariable variable=ArtifactIndex]$index"
+      Write-Host "##vso[task.setvariable variable=ArtifactIndex]0"
     displayName: Set ArtifactIndex to 0
 
   - ${{ each item in parameters.Artifacts }}: 
