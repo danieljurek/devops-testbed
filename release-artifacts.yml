@@ -2,8 +2,6 @@ parameters:
   - name: Artifacts
     type: object
 
-extends:
-
 steps:
   - pwsh: |
       '${{ convertFromJson(parameters.Artifacts) }}' | ConvertFrom-Json | ConvertTo-Json -Depth 100 | Write-Host
