@@ -6,12 +6,15 @@
 parameters:
   - name: release_artifact_1
     displayName: Artifact1
+    type: boolean
     default: true
   - name: release_artifact_2
     displayName: Artifact2
+    type: boolean
     default: true
   - name: release_artifact_3
     displayName: Artifact3
+    type: boolean
     default: true
 
 pr:
