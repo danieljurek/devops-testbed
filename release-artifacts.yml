@@ -8,7 +8,7 @@ steps:
     displayName: Artifacts as JSON
 
   - pwsh: |
-      // An empty string is converted to 0 (i.e. [int]'' = 0)
+      # An empty string is converted to 0 (i.e. [int]'' = 0)
       $index = [int]'$(ArtifactIndex)'
       Write-Host "##vso[task.setvariable variable=ArtifactIndex]$index"
     displayName: Set ArtifactIndex to 0
