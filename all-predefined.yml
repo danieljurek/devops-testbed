@@ -25,7 +25,7 @@ pr:
 jobs: 
   - job: setupazd
     pool:
-      name: $(PoolName)
+      name: azsdk-pool
 
     steps: 
       - template: /release-artifacts.yml
