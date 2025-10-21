@@ -19,12 +19,8 @@ jobs:
           nslookup go.dev
         displayName: 'DNS lookup for go.dev'
 
-      - script: |
-          echo "Testing Node.js TCP connect..."
-          node -e "
-            const net = require('net');
-            const socket = net.createConnection(443, 'go.dev');
-            socket.on('connect', () => { console.log('TCP connect succeeded'); socket.end(); });
-            socket.on('error', err => { console.error('TCP connect failed:', err); process.exit(1); });
-          "
+      - pwsh: |
+          Write-Host "Testing Node.js TCP connect..."
+          node -e 'const net = require("net"); const socket = net.createConnection(443, "go.dev"); socket.on("connect", () => { console.log("TCP connect succeeded"); socket.end(); }); socket.on("error", err => { console.error("TCP connect failed:", err); process.exit(1); });'
         displayName: 'Node TCP connectivity test'
+
