@@ -3,7 +3,7 @@ parameters:
     type: string
 
 jobs:
-  - job: Test-${{ parameters.ImageOverride }}
+  - job: Test_${{ replace(parameters.ImageOverride, '-', '_') }}
     pool:
       name: azsdk-pool
       demands: ImageOverride -equals ${{ parameters.ImageOverride }}
