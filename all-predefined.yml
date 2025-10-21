@@ -3,37 +3,20 @@
 #     include:
 #       - main
 
-parameters:
-  - name: release_artifact_1
-    displayName: Artifact1
-    type: boolean
-    default: true
-  - name: release_artifact_2
-    displayName: Artifact2
-    type: boolean
-    default: true
-  - name: release_artifact_3
-    displayName: Artifact3
-    type: boolean
-    default: true
-
-pr:
-  branches:
-    include:
-      - main
+# pr:
+#   branches:
+#     include:
+#       - main
 
 jobs: 
-  - job: setupazd
-    pool:
-      name: azsdk-pool
-
-    steps: 
-      - template: /release-artifacts.yml
-        parameters:
-          Artifacts:
-            - name: artifact_1
-              releaseInBatch: ${{ parameters.release_artifact_1 }}
-            - name: artifact_2
-              releaseInBatch: ${{ parameters.release_artifact_2 }}
-            - name: artifact_3
-              releaseInBatch: ${{ parameters.release_artifact_3 }}
+  - template: /test-network-go-dev.yml
+    parameters:
+      ImageOverride: windows-2019
+  
+  - template: /test-network-go-dev.yml
+    parameters:
+      ImageOverride: windows-2022
+      
+  - template: /test-network-go-dev.yml
+    parameters:
+      ImageOverride: windows-2025

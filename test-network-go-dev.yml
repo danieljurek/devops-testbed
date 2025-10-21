@@ -1,0 +1,30 @@
+parameters:
+  - name: ImageOverride
+    type: string
+
+jobs:
+  - job: setupazd
+    pool:
+      name: azsdk-pool
+      demands: ImageOverride -equals ${{ parameters.ImageOverride }}
+
+    steps:
+      - script: |
+          echo "Testing connectivity to go.dev..."
+          curl -v https://go.dev/dl/go1.23.7.windows-amd64.zip --output /dev/null
+        displayName: 'Test HTTPS download from go.dev'
+
+      - script: |
+          echo "Checking DNS resolution for go.dev..."
+          nslookup go.dev
+        displayName: 'DNS lookup for go.dev'
+
+      - script: |
+          echo "Testing Node.js TCP connect..."
+          node -e "
+            const net = require('net');
+            const socket = net.createConnection(443, 'go.dev');
+            socket.on('connect', () => { console.log('TCP connect succeeded'); socket.end(); });
+            socket.on('error', err => { console.error('TCP connect failed:', err); process.exit(1); });
+          "
+        displayName: 'Node TCP connectivity test'
