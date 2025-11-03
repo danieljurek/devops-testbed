@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - script: |
-          lsblk -o NAME,SIZE
+          diskutil list
           df -h
         displayName: Disk capacity
 
