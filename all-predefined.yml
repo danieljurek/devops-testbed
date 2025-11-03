@@ -25,6 +25,8 @@ jobs:
       - script: |
           ls -ld /tmp
         displayName: ls -ld /tmp
+      - script: mount
+        displayName: mount
 
 
   - job: disk_space_macos
