@@ -9,6 +9,13 @@
 #       - main
 
 jobs:
-  - template: /test-network-go-dev.yml
-    parameters:
-      ImageOverride: windows-2022
+  - job: disk_space
+    pool:
+      name: azsdk-pool
+      demands: ImageOverride -equals ubuntu-22.04
+
+    steps:
+      - script: |
+          lsblk -o NAME,SIZE
+          df -h
+        displayName: Disk capacity
