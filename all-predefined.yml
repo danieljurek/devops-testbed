@@ -22,6 +22,9 @@ jobs:
           lsblk -o NAME,SIZE
           df -h
         displayName: Disk capacity
+      - script: |
+          ls -ld /tmp
+        displayName: ls -ld /tmp
 
 
   - job: disk_space_macos
@@ -37,6 +40,9 @@ jobs:
           diskutil list
           df -h
         displayName: Disk capacity
+      - script: |
+          ls -ld /tmp
+        displayName: ls -ld /tmp
 
   - job: disk_space_windows
     pool:
