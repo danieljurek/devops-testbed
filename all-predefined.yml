@@ -9,7 +9,7 @@
 #       - main
 
 jobs:
-  - job: disk_space
+  - job: disk_space_linux
     pool:
       name: azsdk-pool
       demands: ImageOverride -equals ubuntu-22.04
@@ -18,4 +18,27 @@ jobs:
       - script: |
           lsblk -o NAME,SIZE
           df -h
+        displayName: Disk capacity
+
+
+  - job: disk_space_macos
+    pool:
+      name: Azure Pipelines
+      vmImage: macOS-15
+
+    steps:
+      - script: |
+          lsblk -o NAME,SIZE
+          df -h
+        displayName: Disk capacity
+
+  - job: disk_space_windows
+    pool:
+      name: azsdk-pool
+      demands: ImageOverride -equals windows-2022
+
+    steps:
+      - pwsh: |
+          Get-PSDrive -PSProvider FileSystem `
+            | Select-Object Name,@{Name="Size(GB)";Expression={[math]::Round($_.Used/1GB + $_.Free/1GB,2)}},@{Name="Free(GB)";Expression={[math]::Round($_.Free/1GB,2)}}
         displayName: Disk capacity
