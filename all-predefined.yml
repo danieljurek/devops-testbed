@@ -18,6 +18,7 @@ jobs:
       - script: docker info
         displayName: docker info
       - script: |
+          sudo du -h --max-depth=3 ~
           sudo du -h --max-depth=3 /var
       - script: |
           echo "TMPDIR: $TMPDIR"
