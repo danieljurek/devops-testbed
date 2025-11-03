@@ -18,6 +18,8 @@ jobs:
       - script: docker info
         displayName: docker info
       - script: |
+          sudo du -h --max-depth=3 /var
+      - script: |
           echo "TMPDIR: $TMPDIR"
           echo "Agent.TempDirectory: $(Agent.TempDirectory)"
       - script: |
