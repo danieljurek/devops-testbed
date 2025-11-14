@@ -9,29 +9,17 @@
 #       - main
 
 jobs:
-  - job: disk_space_linux
+  - job: linux
     pool:
       name: azsdk-pool
       demands: ImageOverride -equals ubuntu-22.04
 
     steps:
-      - script: docker info
-        displayName: docker info
-      - script: |
-          sudo du -h --max-depth=3 ~
-          sudo du -h --max-depth=3 /var
-      - script: |
-          echo "TMPDIR: $TMPDIR"
-          echo "Agent.TempDirectory: $(Agent.TempDirectory)"
-      - script: |
-          lsblk -o NAME,SIZE
-          df -h
-        displayName: Disk capacity
-      - script: |
-          ls -ld /tmp
-        displayName: ls -ld /tmp
-      - script: mount
-        displayName: mount
+      - pwsh: |
+          "hello" > hello.txt
+          "world" > world.txt 
+          diff hello.txt world.txt
+
 
 
   # - job: disk_space_macos
@@ -51,16 +39,13 @@ jobs:
   #         ls -ld /tmp
   #       displayName: ls -ld /tmp
 
-  # - job: disk_space_windows
-  #   pool:
-  #     name: azsdk-pool
-  #     demands: ImageOverride -equals windows-2022
+  - job: windows
+    pool:
+      name: azsdk-pool
+      demands: ImageOverride -equals windows-2022
 
-  #   steps:
-  #     - pwsh: |
-  #         Write-Host "TMPDIR: $($env:TMPDIR)"
-  #         Write-Host "Agent.TempDirectory: $(Agent.TempDirectory)"
-  #     - pwsh: |
-  #         Get-PSDrive -PSProvider FileSystem `
-  #           | Select-Object Name,@{Name="Size(GB)";Expression={[math]::Round($_.Used/1GB + $_.Free/1GB,2)}},@{Name="Free(GB)";Expression={[math]::Round($_.Free/1GB,2)}}
-  #       displayName: Disk capacity
+    steps:
+      - pwsh: |
+          "hello" > hello.txt
+          "world" > world.txt 
+          diff hello.txt world.txt
