@@ -16,6 +16,9 @@ jobs:
 
     steps:
       - pwsh: |
+          Invoke-WebRequest -Uri https://stackoverflow.com/questions/tagged/azure-sdk-cpp
+
+      - pwsh: |
           "hello" > hello.txt
           "world" > world.txt 
           diff hello.txt world.txt
