@@ -9,46 +9,11 @@
 #       - main
 
 jobs:
-  - job: linux
-    pool:
-      name: azsdk-pool
-      demands: ImageOverride -equals ubuntu-22.04
-
-    steps:
-      - pwsh: |
-          Invoke-WebRequest -Uri https://stackoverflow.com/questions/tagged/azure-sdk-cpp
-
-      - pwsh: |
-          "hello" > hello.txt
-          "world" > world.txt 
-          diff hello.txt world.txt
-
-
-
-  # - job: disk_space_macos
-  #   pool:
-  #     name: Azure Pipelines
-  #     vmImage: macOS-15
-
-  #   steps:
-  #     - script: |
-  #         echo "TMPDIR: $TMPDIR"
-  #         echo "Agent.TempDirectory: $(Agent.TempDirectory)"
-  #     - script: |
-  #         diskutil list
-  #         df -h
-  #       displayName: Disk capacity
-  #     - script: |
-  #         ls -ld /tmp
-  #       displayName: ls -ld /tmp
-
   - job: windows
     pool:
       name: azsdk-pool
-      demands: ImageOverride -equals windows-2022
+      demands: ImageOverride -equals windows-2025
 
     steps:
-      - pwsh: |
-          "hello" > hello.txt
-          "world" > world.txt 
-          diff hello.txt world.txt
+      - pwsh: winget search azd
+        displayName: Run winget
