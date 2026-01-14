@@ -15,6 +15,10 @@ jobs:
       demands: ImageOverride -equals ubuntu-24.04
 
     steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: 20.x
+
     - pwsh: |
         npm i -g npm tfx-cli
       displayName: Install tfx-cli
