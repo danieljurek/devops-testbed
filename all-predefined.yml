@@ -9,11 +9,12 @@
 #       - main
 
 jobs:
-  - job: windows
+  - job: linux
     pool:
       name: azsdk-pool
-      demands: ImageOverride -equals windows-2025
+      demands: ImageOverride -equals ubuntu-20.24
 
     steps:
-      - pwsh: winget search azd
-        displayName: Run winget
+    - pwsh: |
+        npm i -g npm tfx-cli
+      displayName: Install tfx-cli
