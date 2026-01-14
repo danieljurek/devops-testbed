@@ -12,7 +12,7 @@ jobs:
   - job: linux
     pool:
       name: azsdk-pool
-      demands: ImageOverride -equals ubuntu-20.24
+      demands: ImageOverride -equals ubuntu-24.04
 
     steps:
     - pwsh: |
