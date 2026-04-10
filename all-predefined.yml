@@ -3,10 +3,10 @@
 #     include:
 #       - main
 
-# pr:
-#   branches:
-#     include:
-#       - main
+pr:
+  branches:
+    include:
+      - main
 
 jobs:
   - job: linux
@@ -15,10 +15,5 @@ jobs:
       demands: ImageOverride -equals ubuntu-24.04
 
     steps:
-    - task: TfxInstaller@5
-      displayName: Install tfx-cli for release
-      inputs:
-        version: 0.23.x
-
-    - pwsh: tfx version 
-      displayName: tfx version
+    - pwsh: Write-Host "Hello world"
+      displayName: Greet
