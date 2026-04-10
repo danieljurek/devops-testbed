@@ -15,5 +15,8 @@ jobs:
       demands: ImageOverride -equals ubuntu-24.04
 
     steps:
+    - pwsh: Write-Host "fail!"; exit 1;
+      displayName: fail
+
     - pwsh: Write-Host "Hello world"
       displayName: Greet
