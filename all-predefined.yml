@@ -15,5 +15,5 @@ jobs:
       demands: ImageOverride -equals ubuntu-24.04
 
     steps:
-    - pwsh: Get-Module | Format-Table
+    - pwsh: Get-Module -ListAvailable | Format-Table
       displayName: List modules
