@@ -15,5 +15,5 @@ jobs:
       demands: ImageOverride -equals ubuntu-24.04
 
     steps:
-    - pwsh: Write-Host "Hello world"
-      displayName: Greet
+    - pwsh: Get-Module | Format-Table
+      displayName: List modules
